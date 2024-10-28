@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "authenticator"
+version = "0.1.0"
+description = ""
+authors = ["Bomuratov Umid"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.115.2"
+uvicorn = {extras = ["standart"], version = "^0.31.1"}
+pydantic = {extras = ["email"], version = "^2.9.2"}
+aiogram = "^3.13.1"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.35"}
+alembic = "^1.13.3"
+asyncpg = "^0.29.0"
+aiosqlite = "^0.20.0"
+pydantic-settings = "^2.5.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
