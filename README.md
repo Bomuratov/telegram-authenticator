@@ -1,46 +1,67 @@
-## Этот проект разработан для отправки кодов верификации
+# Этот проект разработан для отправки кодов верификации
 
-## Установка и развертывание
+## Для установки и развертывание рекомендую прочитать небольшую документацию
 
 ### Создание виртуального окружения
 
 #### Для развертывания вам надо создать виртуалный окружение c помощью комманды
 
 **macOS / Linux:**
-```python3 -m venv venv```
+```
+python3 -m venv venv
+```
 
 **Windows:**
-`bash` python -m venv venv
+```
+python -m venv venv
+```
 
-**Активироватть его:**
+### Активация виртуального окружения
 
 **macOs / Linux**
-```bash source venv/bin/activate ```
+```
+source venv/bin/activate
+```
 
 **Windows**
-```bash venv/script/activate ```
+```
+venv/script/activate
+```
 
-**Установить пакетный менеджер Poetry:**
-```bash pip install poetry ```
+### Установка Poetry
+#### Установить пакетный менеджер Poetry:
+```
+pip install poetry
+```
 
-**Установить все необходимые библиотеки с коммандой:**
 
-```bash poetry install ```
+### Установка необходимых библиотек
+#### Установить все необходимые библиотеки с коммандой:
 
+```
+poetry install
+```
 
-**Coздать переменный окружение .env добавить туда переменные переменные должны начинатся с заглавный буквой SET**
+### Создание переменных окружения
+#### Coздать переменный окружение .env добавить туда переменные переменные должны начинатся с заглавный буквой SET:
 
+```
 SET-BOT-TOKEN=ТУТ ТОКЕН ВАШЕГО ТЕЛЕГРАМ БОТА
 SET-BOT-WEBHOOK_PATH=УКАЖИТЕ /bot/
 SET-BOT-WEBHOOK_URL=ТУТ ВАШ СЕРВЕР КОТОРЫЙ ИМЕЕТ SSL СЕРТИФИКАТ
 SET-DB-URL=ТУТ URL POTSGRESQL
+```
+### Запуск миграций базы данных
+#### Запустить миграции баз данных с коммандой:
 
-**Запустить миграции баз данных с коммандой**
+```
+alembic revision --autogenerate -m "first commit"
+alembic upgrade head
+```
 
-```bash alembic revision --autogenerate -m "first commit" ```
+### Запуск сервера
+#### Запустите сервер с помощью команды:
 
-```bash alembic upgrade head```
-
-**Запустить сервер**
-
-```bash uvicorn main:app --reload --host УКАЖИТЕ HOST --port УКАЖИТЕ PORT```
+```
+uvicorn main:app --reload --host УКАЖИТЕ HOST --port УКАЖИТЕ PORT
+```
