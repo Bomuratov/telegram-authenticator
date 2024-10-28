@@ -7,7 +7,7 @@ from bot.commands import dp, bot
 router = APIRouter()
 
 
-@router.post(f"{settings.bot.webhook_path}{settings.bot.token}")
+@router.post(f"{settings.bot.path}{settings.bot.token}")
 async def bot_webhook(update: dict):
     update = types.Update(**update)
     await dp.feed_update(bot, update)

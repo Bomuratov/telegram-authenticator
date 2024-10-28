@@ -11,7 +11,7 @@ origins = ["*"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await bot.set_webhook(f"{settings.bot.webhook_url}{settings.bot.webhook_path}{settings.bot.token}")
+    await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}{settings.bot.token}")
     print("Вебхук успешно установлен")
     yield
     print("Заканчиваем работу")

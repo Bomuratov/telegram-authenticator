@@ -27,16 +27,16 @@ class DatabaseConfig(BaseModel):
 
 class BotConfig(BaseModel):
     token: str
-    webhook_path: str
-    webhook_url: str
+    path: str
+    url: str
 
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=(".env"),
         case_sensitive=False,
-        env_nested_delimiter="-",
-        env_prefix="SET-",
+        env_nested_delimiter="_",
+        env_prefix="SET_",
     )
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
