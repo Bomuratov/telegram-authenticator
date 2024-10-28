@@ -14,4 +14,4 @@ class ClientGet(ClientCreate):
 
 class VerificationRequest(BaseModel):
     phone: str
-    code: int
+    code: str
