@@ -28,6 +28,7 @@ fastjsonschema==2.20.0
 filelock==3.16.1
 frozenlist==1.4.1
 greenlet==3.1.1
+gunicorn==23.0.0
 h11==0.14.0
 idna==3.10
 importlib_metadata==8.5.0
