@@ -7,7 +7,7 @@ from typing import Union
 BASE_DIR = Path(__file__).parent.parent
 print(BASE_DIR)
 
-load_dotenv(dotenv_path=Path(BASE_DIR, ".env"))
+load_dotenv(dotenv_path=Path(BASE_DIR, ".env"), override=True)
 
 class RunConfig(BaseModel):
     host: str = "127.0.0.1"

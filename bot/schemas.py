@@ -12,6 +12,6 @@ class ClientCreate(BaseModel):
 class ClientGet(ClientCreate):
     id: int
 
-class VerificationRequest(BaseModel):
-    phone: str
-    code: str
+class CodeSchema(BaseModel):
+    user_id: str
+    data: str

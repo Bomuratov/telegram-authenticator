@@ -3,6 +3,7 @@ from config import db_redis
 from bot.commands import bot
 from aiogram.exceptions import TelegramBadRequest
 from utils.encode import encoder
+from bot.schemas import CodeSchema
 
 
 router = APIRouter()
@@ -31,12 +32,12 @@ router = APIRouter()
 
 
 @router.post("/send_code/")
-async def send_code(user_id: int, data: int ):
-    user_id = encoder(user_id)
-    db_redis.setex(f"verification:{user_id}", 900, data)
+async def send_code(payload: CodeSchema):
+    user_id = encoder(int(payload.user_id))
+    db_redis.setex(f"verification:{user_id}", 900, payload.data)
     
     try:
-        await bot.send_message(chat_id=user_id, text=f"Ваш код верификации {data} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
+        await bot.send_message(chat_id=user_id, text=f"Ваш код верификации {payload.data} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
         return {
             "status": status.HTTP_200_OK,
             "detail": "Success"
@@ -44,5 +45,5 @@ async def send_code(user_id: int, data: int ):
     except TelegramBadRequest as e:
         return {
             "status": status.HTTP_403_FORBIDDEN,
-            "detail": f"К сожалению мы не смогли отправить вам проверочный код пожалуйста войдите по ссылке и запустите бота https://t.me/verify_01_bot?start={user_id}"
+            "detail": f"https://t.me/aurora_auth_bot?start={user_id}"
         }

@@ -52,16 +52,17 @@ dp = Dispatcher()
 @dp.message(Command("start"))
 async def send_message(message: types.Message):
     phone_id = message.text[7:]
+    print(phone_id)
     if not phone_id:
         return await bot.send_message(chat_id=message.chat.id,
-                                      text="По вашему номеру телефона не найден проверочный код. Для решения проблемы обратитесь в поддержку",
+                                      text="По вашему номеру телефона не найден проверочный код. Для решения проблемы пройдите регистрацию на сайте aurora-app.uz",
                                       parse_mode="HTML")
     code = db_redis.get(f"verification:{phone_id}")
     if not code:
         return await bot.send_message(chat_id=message.chat.id,
-                                      text="Вашему номеру телефона пока неназначен проверочный код. Для решения проблемы обратитесь в поддержку",
+                                      text="Вашему номеру пока не назначен проверочный код или он уже просрочен. Для решения проблемы запросите код заново",
                                       parse_mode="HTML")
     code = code.decode('utf-8') if isinstance(code, bytes) else code
     return await bot.send_message(chat_id=message.chat.id, 
-                                  text=f"Ваш код верификации {code} не сообщите его никому. Данный код действителен в течении 15 минут", 
+                                  text=f"Ваш код верификации <code><b>{code}</b></code> не сообщите его никому. \nДанный код действителен в течении 15 минут", 
                                   parse_mode="HTML")

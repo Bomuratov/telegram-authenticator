@@ -9,12 +9,9 @@ def send_code(url, phone, code):
         "code": code
     }
     try:
-        # Отправка POST-запроса
         response = requests.post(url, json=data, headers=headers)
-
-        # Проверка статуса ответа
-        response.raise_for_status()  # Генерирует исключение для кодов ошибки 4xx и 5xx
-        return response.json()  # Возвращает ответ в формате JSON
+        response.raise_for_status()
+        return response.json()
 
     except requests.exceptions.RequestException as e:
         print(f'Произошла ошибка: {e}')
