@@ -1,10 +1,12 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from config import db_helper
+from config import db_helper, db_redis
 from bot.models import Client
 from bot.commands import bot
 from bot.schemas import VerificationRequest
+from aiogram.exceptions import TelegramBadRequest
+from utils.encode import encoder
 
 
 router = APIRouter()
@@ -27,5 +29,24 @@ async def send_verification_code(request:VerificationRequest, session: AsyncSess
             )
         session.add(client)
         await session.commit()
-        bot_link = f"https://t.me/tezauth_bot/start={request.code}"
+        bot_link = f"https://t.me/verify_01_bot/start={request.code}"
         return {"status": "pending", "message": f"Пожалуйста, перейдите по ссылке на бот для завершения регистрации: {bot_link}"}
+    
+
+
+@router.post("/send_code/")
+async def send_code(user_id: int, data: int ):
+    user_id = encoder(user_id)
+    db_redis.setex(f"verification:{user_id}", 900, data)
+    
+    try:
+        await bot.send_message(chat_id=user_id, text=f"Ваш код верификации {data} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
+        return {
+            "status": status.HTTP_200_OK,
+            "detail": "Success"
+        }
+    except TelegramBadRequest as e:
+        return {
+            "status": status.HTTP_403_FORBIDDEN,
+            "detail": f"К сожалению мы не смогли отправить вам проверочный код пожалуйста войдите по ссылке и запустите бота https://t.me/verify_01_bot?start={user_id}"
+        }

@@ -20,12 +20,12 @@ async def lifespan(app: FastAPI):
     await db_helper.dispose()
 
 
-app = FastAPI(lifespan=lifespan)
-app.include_router(router, tags=["webhook"])
-app.include_router(send_code, tags=["send_code"])
+fapp = FastAPI(lifespan=lifespan)
+fapp.include_router(router, tags=["webhook"])
+fapp.include_router(send_code, tags=["send_code"])
 
 
-app.add_middleware(
+fapp.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,

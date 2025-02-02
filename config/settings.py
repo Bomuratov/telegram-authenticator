@@ -12,11 +12,18 @@ load_dotenv(dotenv_path=Path(BASE_DIR, ".env"))
 class RunConfig(BaseModel):
     host: str = "127.0.0.1"
     port: int = 8000
+    port_redis: int = 6379
 
 
 class ApiPrefix(BaseModel):
     prefix: str = "/api"
 
+
+class RedisConfig(BaseModel):
+    host: str
+    port: int 
+    password: str
+    ssl: bool = True
 
 class DatabaseConfig(BaseModel):
     url: str
@@ -42,6 +49,7 @@ class Settings(BaseSettings):
     api: ApiPrefix = ApiPrefix()
     db: DatabaseConfig
     bot: BotConfig
+    redis: RedisConfig
 
 
 settings = Settings()
