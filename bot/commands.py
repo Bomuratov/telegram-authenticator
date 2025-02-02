@@ -1,9 +1,6 @@
-from sqlalchemy import select
 from aiogram import types, Bot, Dispatcher
 from aiogram.filters import Command
-from .models import Client
-from config import db_helper, settings, db_redis
-from utils.decode import decoder
+from config import settings, db_redis
 
 bot = Bot(token=f"{settings.bot.token}")
 dp = Dispatcher()

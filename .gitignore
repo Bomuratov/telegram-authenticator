@@ -5,3 +5,9 @@ env/
 venv/
 /venv/
 .env
+
+alembic/
+.alembic
+/alembic/
+/alembic
+alembic.ini
