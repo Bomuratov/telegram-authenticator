@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
-from config import settings, db_helper
+from config import settings
 from bot.webhook import bot, router
 from api.v1.send_code import router as send_code
 
@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
     print("Заканчиваем работу")
     await bot.delete_webhook()
     await bot.session.close()
-    await db_helper.dispose()
+    # await db_helper.dispose()
 
 
 fapp = FastAPI(lifespan=lifespan)
