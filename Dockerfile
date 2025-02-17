@@ -5,11 +5,11 @@ FROM python:3.11
 WORKDIR /app
 
 # Копируем зависимости и устанавливаем их
-COPY telegram-authenticator/requirements.txt .
+COPY /telegram/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Копируем проект FastAPI
-COPY telegram-authenticator /app
+COPY /telegram /app
 
 # Открываем порт для FastAPI
 EXPOSE 8001
