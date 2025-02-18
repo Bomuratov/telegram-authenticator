@@ -16,3 +16,5 @@ EXPOSE 8001
 
 # Запускаем сервер через Uvicorn
 CMD ["uvicorn", "main:fapp", "--host", "0.0.0.0", "--port", "8001"]
+
+
