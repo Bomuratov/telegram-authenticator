@@ -1,20 +1,43 @@
-version: '3.8'
+# version: '3.8'
 
-services:
+# services:
 
-  fastapi:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: backend-fastapi
-    restart: unless-stopped
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    networks:
-      - backend
+#   fastapi:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: backend-fastapi
+#     restart: unless-stopped
+#     volumes:
+#       - .:/app
+#     ports:
+#       - "8000:8000"
+#     networks:
+#       - backend
 
-networks:
-  backend:
-    driver: bridge
+# networks:
+#   backend:
+#     driver: bridge
+
+
+# fastapi:
+#     build:
+#       context: ./telegram-authenticator  # Убедитесь, что папка `fastapi` содержит ваш FastAPI-проект
+#       dockerfile: Dockerfile
+#     container_name: backend-fastapi
+#     restart: unless-stopped
+#     volumes:
+#       - ./telegram-authenticator:/app
+#     expose:
+#       - "8001"
+#     environment:
+#       - SET_BOT_TOKEN=8162189030:AAG_E7gx-Tger7DcVkIMOry7gvh61ysvij4
+#       - SET_BOT_PATH=/bot/
+#       - SET_BOT_URL=https://api.aurora-api.uz/fastapi
+#       - SET_DB_URL=database-1.cclwu8wekwvg.us-east-1.rds.amazonaws.com
+#       - SET_REDIS_HOST=renewing-penguin-48165.upstash.io
+#       - SET_REDIS_PORT=6379
+#       - SET_REDIS_PASSWORD=AbwlAAIjcDE5ODVlMTQ5M2NjOGM0NmJhYmQzMDBjMWZmZjViMGMwOXAxMA
+#     networks:
+#       - backend
+

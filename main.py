@@ -22,7 +22,7 @@ async def lifespan(app: FastAPI):
     # await db_helper.dispose()
 
 
-fapp = FastAPI(lifespan=lifespan)
+fapp = FastAPI(lifespan=lifespan, root_path="/fastapi")
 fapp.include_router(router, tags=["webhook"])
 fapp.include_router(send_code, tags=["send_code"])
 
