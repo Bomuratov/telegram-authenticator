@@ -54,6 +54,7 @@ async def send_message(message: types.Message):
     phone_id = message.text[7:]
     print(phone_id)
     if not phone_id:
+        print(message)
         return await bot.send_message(chat_id=message.chat.id,
                                       text="По вашему номеру телефона не найден проверочный код. Для решения проблемы пройдите регистрацию на сайте aurora-app.uz",
                                       parse_mode="HTML")

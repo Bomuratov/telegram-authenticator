@@ -12,6 +12,7 @@ class UpdateSchema(BaseModel):
     update_id: Optional[int]
     message: Optional[dict]
 
+
 @router.post(f"{settings.bot.path}{settings.bot.token}")
 async def bot_webhook(update: UpdateSchema):
     update = types.Update(**update.dict())

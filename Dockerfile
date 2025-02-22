@@ -4,13 +4,15 @@ FROM python:3.11
 # Устанавливаем рабочую директорию
 WORKDIR /app
 
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
 # Копируем зависимости и устанавливаем их
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Копируем проект FastAPI
-COPY /telegram /app
-
+COPY . .
 # Открываем порт для FastAPI
 EXPOSE 8001
 
