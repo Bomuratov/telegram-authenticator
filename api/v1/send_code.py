@@ -3,6 +3,7 @@ from config import db_redis
 from bot.commands import bot
 from aiogram.exceptions import TelegramBadRequest
 from utils.encode import encoder
+from utils.decode import decoder
 from bot.schemas import CodeSchema
 
 
@@ -34,6 +35,7 @@ router = APIRouter()
 @router.post("/send_code/")
 async def send_code(payload: CodeSchema):
     user_id = encoder(int(payload.user_id))
+    print(decoder(user_id))
     db_redis.setex(f"verification:{user_id}", 900, payload.data)
     
     try:

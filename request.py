@@ -3,10 +3,10 @@ import requests
 headers = {
         'Content-Type': 'application/json',
     }
-def send_code(url, phone, code):
+def send_code(url, user_id, data):
     data={
-        "phone": phone,
-        "code": code
+        "user_id": user_id,
+        "data": data
     }
     try:
         response = requests.post(url, json=data, headers=headers)
@@ -18,7 +18,7 @@ def send_code(url, phone, code):
         print(f'Статус: {response.status_code}, Тело ответа: {response.text}')
         return None
     
-print(send_code(url="https://api.aurora-api.uz/fastapi/send_verification_code/", phone="998881836222", code=123456))
+print(send_code(url="https://api.aurora-api.uz/fastapi/send_code/", user_id="998881836222", data="123456"))
 
 
 
