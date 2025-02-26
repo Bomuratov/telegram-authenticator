@@ -36,6 +36,11 @@ class BotConfig(BaseModel):
     token: str
     path: str
     url: str
+    group_id: int
+
+
+class Git(BaseModel):
+    secret: str
 
 
 class Settings(BaseSettings):
@@ -50,6 +55,7 @@ class Settings(BaseSettings):
     db: DatabaseConfig
     bot: BotConfig
     redis: RedisConfig
+    git: Git
 
 
 settings = Settings()

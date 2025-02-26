@@ -1,41 +1,28 @@
-from fastapi import APIRouter, status
+import random
+from fastapi import APIRouter, status, Depends, Request, HTTPException
 from config import db_redis
 from bot.commands import bot
 from aiogram.exceptions import TelegramBadRequest
 from utils.encode import encoder
-from utils.decode import decoder
 from bot.schemas import CodeSchema
+from crud.user_crud import UserCrud
+from sqlalchemy.ext.asyncio import AsyncSession
+from config import db_helper, settings
+import hmac
+import hashlib
+from datetime import datetime
+
 
 
 router = APIRouter()
 
-
-# @router.post("/send_verification_code/")
-# async def send_verification_code(request:VerificationRequest, session: AsyncSession = Depends(db_helper.session_getter)):
-#     existing_client = await session.execute(
-#         select(Client).where(Client.phone == request.phone)
-#     )
-#     client = existing_client.scalar_one_or_none()
-
-#     if client and client.is_registered:
-#         await bot.send_message(client.chat_id, f"Ваш код подтверждения: {request.code}")
-#         return {"status": "success", "message": "Код подтверждения отправлен"}
-#     else:
-#         client = Client(
-#             phone=request.phone, 
-#             code=request.code
-#             )
-#         session.add(client)
-#         await session.commit()
-#         bot_link = f"https://t.me/verify_01_bot/start={request.code}"
-#         return {"status": "pending", "message": f"Пожалуйста, перейдите по ссылке на бот для завершения регистрации: {bot_link}"}
-    
-
-
 @router.post("/send_code/")
 async def send_code(payload: CodeSchema):
+    code = random.randint(100000, 999999)
+
     user_id = encoder(int(payload.user_id))
-    print(decoder(user_id))
+    user_phone = payload.user_id
+    print(user_phone)
     db_redis.setex(f"verification:{user_id}", 900, payload.data)
     
     try:
@@ -49,3 +36,73 @@ async def send_code(payload: CodeSchema):
             "status": status.HTTP_403_FORBIDDEN,
             "detail": f"https://t.me/aurora_auth_bot?start={user_id}"
         }
+    
+
+@router.post("/send/")
+async def send(phone: str):
+    code = random.randint(100000, 999999)
+    phone = encoder(int(phone))
+    db_redis.setex(f"code_for:{phone}", 900, code)
+
+    try:
+        await bot.send_message(chat_id=phone, text=f"Ваш код верификации {code} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
+        return {
+            "status": status.HTTP_200_OK,
+            "detail": "Success"
+        }
+    except TelegramBadRequest as e:
+        return {
+            "status": status.HTTP_403_FORBIDDEN,
+            "detail": f"https://t.me/verify_01_bot?start={phone}"
+        }
+    
+@router.post("/get_chat_id/")
+async def get(phone:str, session: AsyncSession = Depends(db_helper.session_getter)):
+    return await UserCrud.get_chat_id_by_phone(phone, session)
+
+
+
+async def verify_signature(request: Request):
+    # Проверка подписи GitHub
+    signature = request.headers.get("X-Hub-Signature-256", "")
+    body = await request.body()
+    
+    secret = settings.git.secret.encode()
+    expected = hmac.new(secret, body, hashlib.sha256).hexdigest()
+    expected = f"sha256={expected}"
+    
+    if not hmac.compare_digest(signature, expected):
+        raise HTTPException(status_code=403, detail="Invalid signature")
+
+@router.post("/git")
+async def handle_github_webhook(request: Request):
+    await verify_signature(request)
+    data = await request.json()
+    
+    if "push" not in request.headers.get("X-GitHub-Event", ""):
+        return {"status": "ignored"}
+    
+    commit = data.get("head_commit", {})
+    author = commit.get("author", {}).get("name", "Unknown")
+    branch = data.get("ref", "").split("/")[-1]
+    timestamp = commit.get("timestamp", "")
+    commit_url = commit.get("url", "")
+    repo_url = data.get("repository", {}).get("html_url", "")
+    messages = commit.get("message", "")
+    
+    if timestamp:
+        dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+        formatted_time = dt.strftime("%d.%m.%Y %H:%M:%S")
+    else:
+        formatted_time = "N/A"
+    message = (
+        "💥 <b>Новый коммит!</b>\n"
+        f"👨‍💻 <b>Автор:</b> {author}\n"
+        f"🪵 <b>Ветка:</b> `{branch}`\n"
+        f"📆 <b>Дата:</b> {formatted_time}\n"
+        f"📝 <b>Комментарий к коммиту:</b> {messages}\n"
+        f"🔗 <b>Ссылка на коммит:</b> <a href='{commit_url}'>click</a>\n"
+        f"🔗 <b>Ссылка на pепозиторий:</b> <a href='{repo_url}'>click</a>"
+    )
+    bot.send_message(chat_id=settings.bot.group_id, text=message, parse_mode="HTML")
+    return {"status": "ok"}
