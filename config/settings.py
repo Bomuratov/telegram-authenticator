@@ -25,12 +25,12 @@ class RedisConfig(BaseModel):
     password: str
     ssl: bool = True
 
-class DatabaseConfig(BaseModel):
-    url: str
-    echo: bool = False
-    echo_pool: bool = False
-    pool_size: int = 50
-    max_overflow: int = 10
+# class DatabaseConfig(BaseModel):
+#     url: str
+#     echo: bool = False
+#     echo_pool: bool = False
+#     pool_size: int = 50
+#     max_overflow: int = 10
 
 class BotConfig(BaseModel):
     token: str
@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     )
     run: RunConfig = RunConfig()
     api: ApiPrefix = ApiPrefix()
-    db: DatabaseConfig
+    # db: DatabaseConfig
     bot: BotConfig
     redis: RedisConfig
     git: Git
