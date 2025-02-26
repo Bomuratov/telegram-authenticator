@@ -102,5 +102,5 @@ async def handle_github_webhook(request: Request):
         f"🔗 <b>Ссылка на коммит:</b> <a href='{commit_url}'>click</a>\n"
         f"🔗 <b>Ссылка на pепозиторий:</b> <a href='{repo_url}'>click</a>"
     )
-    bot.send_message(chat_id=GROUP_ID, text=message, parse_mode="HTML")
+    await bot.send_message(chat_id=GROUP_ID, text=message, parse_mode="HTML")
     return {"status": "ok"}
