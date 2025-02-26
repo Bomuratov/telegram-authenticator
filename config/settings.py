@@ -36,7 +36,6 @@ class BotConfig(BaseModel):
     token: str
     path: str
     url: str
-    group_id: int
 
 
 class Git(BaseModel):

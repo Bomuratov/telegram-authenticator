@@ -59,7 +59,7 @@ async def send_code(payload: CodeSchema):
 # async def get(phone:str, session: AsyncSession = Depends(db_helper.session_getter)):
 #     return await UserCrud.get_chat_id_by_phone(phone, session)
 
-
+GROUP_ID="-974972939"
 
 async def verify_signature(request: Request):
     # Проверка подписи GitHub
@@ -103,5 +103,5 @@ async def handle_github_webhook(request: Request):
         f"🔗 <b>Ссылка на коммит:</b> <a href='{commit_url}'>click</a>\n"
         f"🔗 <b>Ссылка на pепозиторий:</b> <a href='{repo_url}'>click</a>"
     )
-    bot.send_message(chat_id=settings.bot.group_id, text=message, parse_mode="HTML")
+    bot.send_message(chat_id=GROUP_ID, text=message, parse_mode="HTML")
     return {"status": "ok"}
