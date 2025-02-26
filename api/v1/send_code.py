@@ -77,7 +77,7 @@ async def handle_github_webhook(request: Request):
     await verify_signature(request)
     data = await request.json()
     
-    if "push" or "merge" not in request.headers.get("X-GitHub-Event", ""):
+    if "push" not in request.headers.get("X-GitHub-Event", ""):
         return {"status": "ignored"}
     
     commit = data.get("head_commit", {})
