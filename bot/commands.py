@@ -45,7 +45,7 @@ dp = Dispatcher()
 #         await message.answer("Ошибка: номер телефона не был отправлен.")
 
 
-@dp.message(Command("id"))
+@dp.message(Command("myid"))
 async def send_message(message: types.Message):
     return await bot.send_message(chat_id=message.chat.id, text=f"Твой айди {message.chat.id}")
 

@@ -7,7 +7,7 @@ from utils.encode import encoder
 from bot.schemas import CodeSchema
 from crud.user_crud import UserCrud
 from sqlalchemy.ext.asyncio import AsyncSession
-from config import db_helper, settings
+from config import settings
 import hmac
 import hashlib
 from datetime import datetime
@@ -18,7 +18,6 @@ router = APIRouter()
 
 @router.post("/send_code/")
 async def send_code(payload: CodeSchema):
-    code = random.randint(100000, 999999)
 
     user_id = encoder(int(payload.user_id))
     user_phone = payload.user_id
@@ -38,27 +37,27 @@ async def send_code(payload: CodeSchema):
         }
     
 
-@router.post("/send/")
-async def send(phone: str):
-    code = random.randint(100000, 999999)
-    phone = encoder(int(phone))
-    db_redis.setex(f"code_for:{phone}", 900, code)
+# @router.post("/send/")
+# async def send(phone: str):
+#     code = random.randint(100000, 999999)
+#     phone = encoder(int(phone))
+#     db_redis.setex(f"code_for:{phone}", 900, code)
 
-    try:
-        await bot.send_message(chat_id=phone, text=f"Ваш код верификации {code} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
-        return {
-            "status": status.HTTP_200_OK,
-            "detail": "Success"
-        }
-    except TelegramBadRequest as e:
-        return {
-            "status": status.HTTP_403_FORBIDDEN,
-            "detail": f"https://t.me/verify_01_bot?start={phone}"
-        }
+#     try:
+#         await bot.send_message(chat_id=phone, text=f"Ваш код верификации {code} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
+#         return {
+#             "status": status.HTTP_200_OK,
+#             "detail": "Success"
+#         }
+#     except TelegramBadRequest as e:
+#         return {
+#             "status": status.HTTP_403_FORBIDDEN,
+#             "detail": f"https://t.me/verify_01_bot?start={phone}"
+#         }
     
-@router.post("/get_chat_id/")
-async def get(phone:str, session: AsyncSession = Depends(db_helper.session_getter)):
-    return await UserCrud.get_chat_id_by_phone(phone, session)
+# @router.post("/get_chat_id/")
+# async def get(phone:str, session: AsyncSession = Depends(db_helper.session_getter)):
+#     return await UserCrud.get_chat_id_by_phone(phone, session)
 
 
 
