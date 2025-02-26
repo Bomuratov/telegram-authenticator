@@ -38,7 +38,7 @@ class BotConfig(BaseModel):
     url: str
 
 
-class Git(BaseModel):
+class GitConfig(BaseModel):
     secret: str
 
 
@@ -54,7 +54,7 @@ class Settings(BaseSettings):
     # db: DatabaseConfig
     bot: BotConfig
     redis: RedisConfig
-    git: Git
+    git: GitConfig
 
 
 settings = Settings()

@@ -5,7 +5,6 @@ from bot.commands import bot
 from aiogram.exceptions import TelegramBadRequest
 from utils.encode import encoder
 from bot.schemas import CodeSchema
-from crud.user_crud import UserCrud
 from sqlalchemy.ext.asyncio import AsyncSession
 from config import settings
 import hmac
