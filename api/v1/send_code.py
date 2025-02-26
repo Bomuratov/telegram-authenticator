@@ -96,11 +96,11 @@ async def handle_github_webhook(request: Request):
     message = (
         "💥 <b>Новый коммит!</b>\n"
         f"👨‍💻 <b>Автор:</b> {author}\n"
-        f"🪵 <b>Ветка:</b> `{branch}`\n"
+        f"🪵 <b>Ветка:</b> {branch.upper()}\n"
         f"📆 <b>Дата:</b> {formatted_time}\n"
         f"📝 <b>Комментарий к коммиту:</b> {messages}\n"
-        f"🔗 <b>Ссылка на коммит:</b> <a href='{commit_url}'>click</a>\n"
-        f"🔗 <b>Ссылка на pепозиторий:</b> <a href='{repo_url}'>click</a>"
+        f"🔗 <b>Коммит:</b> <a href='{commit_url}'>link</a>\n"
+        f"🔗 <b>Репозиторий:</b> <a href='{repo_url}'>link</a>"
     )
     await bot.send_message(chat_id=GROUP_ID, text=message, parse_mode="HTML")
     return {"status": "ok"}
