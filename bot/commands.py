@@ -58,7 +58,7 @@ async def send_message(message: types.Message):
         return await bot.send_message(chat_id=message.chat.id,
                                       text="По вашему номеру телефона не найден проверочный код. Для решения проблемы пройдите регистрацию на сайте aurora-app.uz",
                                       parse_mode="HTML")
-    code = db_redis.get(f"code_for:{phone_id}")
+    code = db_redis.get(f"verification:{phone_id}")
     if not code:
         return await bot.send_message(chat_id=message.chat.id,
                                       text="Вашему номеру пока не назначен проверочный код или он уже просрочен. Для решения проблемы запросите код заново",
