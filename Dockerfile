@@ -17,7 +17,8 @@ COPY . .
 EXPOSE 8001
 
 # Запускаем сервер через Uvicorn
-CMD ["gunicorn", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "main:fapp", "--bind", "0.0.0.0:8001", "--timeout", "120"]
+# Добавить "-w", "1", для запуска воркеров
+CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "main:fapp", "--bind", "0.0.0.0:8001", "--timeout", "120"]
 
 
 
