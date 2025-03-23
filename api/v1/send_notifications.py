@@ -3,14 +3,15 @@ import requests
 from aiogram.exceptions import TelegramBadRequest
 from schemas.notifications import NotifyModel
 from bot.commands import bot
-from utils.create_text import create_order
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from typing import Dict, Any
+from utils.create_text import create_order
 
 router = APIRouter()
 
 @router.post("/new-order/")
 async def new_order_notification(payload: Dict[str, Any]):
+    print(payload)
     restaurant_id = payload["restaurant"]
     print(payload)
 
