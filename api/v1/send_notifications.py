@@ -9,6 +9,7 @@ from utils.create_text import create_order
 
 router = APIRouter()
 
+
 @router.post("/new-order/")
 async def new_order_notification(payload: Dict[str, Any]):
     print(payload)
