@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from config import settings
 from bot.webhook import bot, router
 from api.v1.send_code import router as send_code
+from api.v1.send_notifications import router as send_notify
 
 
 
@@ -25,6 +26,7 @@ async def lifespan(app: FastAPI):
 fapp = FastAPI(lifespan=lifespan, root_path="/fastapi")
 fapp.include_router(router, tags=["webhook"])
 fapp.include_router(send_code, tags=["send_code"])
+fapp.include_router(send_notify, tags=["send_notify"])
 
 
 

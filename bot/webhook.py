@@ -1,9 +1,9 @@
 from fastapi import APIRouter
-from aiogram import types
 from config import settings
 from bot.commands import dp, bot
 from pydantic import BaseModel
 from typing import Optional
+from aiogram.types import Update
 
 router = APIRouter()
 
@@ -14,6 +14,6 @@ class UpdateSchema(BaseModel):
 
 
 @router.post(f"{settings.bot.path}{settings.bot.token}")
-async def bot_webhook(update: UpdateSchema):
-    update = types.Update(**update.dict())
+async def bot_webhook(update: Update):
+
     await dp.feed_update(bot, update)
