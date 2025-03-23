@@ -11,9 +11,8 @@ router = APIRouter()
 
 @router.post("/new-order/")
 async def new_order_notification(payload: Dict[str, Any]):
-    if not payload["restaurant"] :
-        raise HTTPException(detail="Не передан chat_id", status_code=status.HTTP_400_BAD_REQUEST)
     restaurant_id = payload["restaurant"]
+    print(payload)
 
     keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
