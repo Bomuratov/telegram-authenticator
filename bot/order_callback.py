@@ -22,6 +22,8 @@ async def handle_order_action(callback_query: types.CallbackQuery):
         await callback_query.message.reply(f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}")
         await callback_query.message.delete_reply_markup()
         response = requests.put(url=f"https://backend.aurora-app.uz/api/orders/update/{order_id}", json=data, headers=headers)
+        print(response)
+        print(response.text)
     elif action == "reject_order":
         data = {
         "status": "canceled"
@@ -29,3 +31,6 @@ async def handle_order_action(callback_query: types.CallbackQuery):
         await callback_query.message.reply(f"❌ Заказ #{order_id} отменил пользователь @{callback_query.from_user.username}")
         await callback_query.message.delete_reply_markup()
         response= requests.put(url=f"https://backend.aurora-app.uz/api/orders/update/{order_id}", json=data, headers=headers)
+        print(response)
+        print(response.text)
+
