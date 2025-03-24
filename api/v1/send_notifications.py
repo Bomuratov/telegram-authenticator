@@ -19,8 +19,8 @@ async def new_order_notification(payload: Dict[str, Any]):
     keyboard = InlineKeyboardMarkup(
             inline_keyboard=[
                 [
-                    InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order: {payload['id']}"),
-                    InlineKeyboardButton(text="❌ Отказать", callback_data=f"reject_order: {payload['id']}")
+                    InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload['id']}"),
+                    InlineKeyboardButton(text="❌ Отказать", callback_data=f"reject_order:{payload['id']}")
                 ]
             ]
         )
