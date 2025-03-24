@@ -29,9 +29,9 @@ async def lifespan(app: FastAPI):
     yield
     task.cancel()
     logger.info("Заканчиваем работу")
-    logger.info(f"Удаляем вебхук {await bot.get_webhook_info()}")
-    await bot.delete_webhook()
-    logger.info(f"Вебхук удален: {await bot.get_webhook_info()}")
+    # logger.info(f"Удаляем вебхук {await bot.get_webhook_info()}")
+    # await bot.delete_webhook()
+    # logger.info(f"Вебхук удален: {await bot.get_webhook_info()}")
     await bot.session.close()
     logger.info(f"Сессия бота закрыт: ")
     # await db_helper.dispose()
@@ -54,4 +54,5 @@ fapp.add_middleware(
 
 @fapp.get("/health")
 async def health_check():
+    await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}{settings.bot.token}")
     return {"status": "ok"}
