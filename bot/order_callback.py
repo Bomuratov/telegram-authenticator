@@ -26,6 +26,7 @@ async def send_order_update(order_id: str, status: str):
 async def handle_order_action(callback_query: types.CallbackQuery):
 
     action, order_id = callback_query.data.split(":", 3)
+    order_id = order_id.strip()
 
     if action == "accept_order":
         text = f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}"
@@ -41,3 +42,4 @@ async def handle_order_action(callback_query: types.CallbackQuery):
     await callback_query.message.reply(text)
     await callback_query.message.delete_reply_markup()
     asyncio.create_task(send_order_update(order_id, status))
+    await callback_query.answer("ok")
