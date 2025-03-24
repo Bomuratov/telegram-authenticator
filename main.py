@@ -51,12 +51,12 @@ fapp.add_middleware(
 
 @fapp.get("/health")
 async def health_check():
-    webhook_info = await bot.get_webhook_info()
-    webhook_url = f"{settings.bot.url}{settings.bot.path}{settings.bot.token}"
+    # webhook_info = await bot.get_webhook_info()
+    # webhook_url = f"{settings.bot.url}{settings.bot.path}{settings.bot.token}"
 
-    if webhook_info.url != webhook_url:  # Устанавливаем вебхук, только если он не совпадает
-        await bot.set_webhook(webhook_url)
-        logger.info(f"✅ Вебхук установлен: {await bot.get_webhook_info()}")
-    else:
-        logger.info(f"✅ Вебхук уже установлен: {webhook_info.url}")
+    # if webhook_info.url != webhook_url:  # Устанавливаем вебхук, только если он не совпадает
+    #     await bot.set_webhook(webhook_url)
+    #     logger.info(f"✅ Вебхук установлен: {await bot.get_webhook_info()}")
+    # else:
+    #     logger.info(f"✅ Вебхук уже установлен: {webhook_info.url}")
     return {"status": "ok"}
