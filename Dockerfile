@@ -20,5 +20,5 @@ EXPOSE 8000
 # Добавить  для запуска воркеров
 # CMD ["gunicorn", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "main:fapp", "--bind", "0.0.0.0:8001", "--timeout", "120"]
 
-CMD ["uvicorn", "main:fapp", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "main:fapp", "--host", "0.0.0.0", "--port", "8000", "--reload", "--log-level", "debug"]
 
