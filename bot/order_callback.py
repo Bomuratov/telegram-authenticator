@@ -73,7 +73,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    send_order_update(int(order_id), status)    
+    await send_order_update(int(order_id), status)    
 
 
 @bot_router.callback_query(F.data.startswith("accept_order"))
@@ -118,4 +118,4 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    send_order_update(int(order_id), status) 
+    await send_order_update(int(order_id), status) 
