@@ -1,4 +1,5 @@
 import logging
+import asyncio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -13,13 +14,20 @@ logger = logging.getLogger(__name__)
 
 origins = ["*"]
 
+async def keep_alive():
+    """Фоновая задача, чтобы Render не останавливал процесс"""
+    while True:
+        await asyncio.sleep(10)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     url1 = settings.bot.url+settings.bot.path+settings.bot.token
     # print(url1)
     await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}{settings.bot.token}")
     logger.info(f"Вебхук успешно установлен {await bot.get_webhook_info()}")
+    task = asyncio.create_task(keep_alive())
     yield
+    task.cancel()
     logger.info("Заканчиваем работу")
     logger.info(f"Удаляем вебхук {await bot.get_webhook_info()}")
     await bot.delete_webhook()
@@ -43,3 +51,7 @@ fapp.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@fapp.get("/health")
+async def health_check():
+    return {"status": "ok"}
