@@ -13,13 +13,9 @@ async def send_order_update(order_id: str, status: str):
     headers = {'Content-Type': 'application/json'}
     data = {"status": status}
 
-    loop = asyncio.get_running_loop()
     try:
-        response = await loop.run_in_executor(
-            None, 
-            lambda: requests.put(url, json=data, headers=headers)
-            )
-        print(f"✅ Ответ от сервера ({status}):")
+        response = await asyncio.to_thread(requests.put, url, json=data, headers=headers)
+        print(f"✅ Ответ от сервера ({status}):", response.status_code, response.text)
     except Exception as e:
         print(f"❌ Ошибка при обновлении заказа #{order_id}: {e}")
 
