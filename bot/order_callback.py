@@ -21,7 +21,7 @@ async def send_order_update(order_id: int, status: str):
     logger.info(f"Запуск send_order_update для заказа #{order_id} со статусом '{status}'")
     logger.info(f"##################################")
     try:
-        response = await asyncio.to_thread(requests.put, url, json=data, headers=headers)
+        response = requests.put(url=url, json=data, headers=headers)
         logger.info(f"##################################")
         logger.info(f"✅ Ответ от сервера для заказа #{order_id} ({status}): {response.status_code} {response.text}")
         logger.info(f"##################################")
@@ -73,7 +73,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    asyncio.create_task(send_order_update(int(order_id), status))    
+    send_order_update(int(order_id), status)    
 
 
 @bot_router.callback_query(F.data.startswith("accept_order"))
@@ -118,4 +118,4 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    asyncio.create_task(send_order_update(int(order_id), status)) 
+    send_order_update(int(order_id), status) 
