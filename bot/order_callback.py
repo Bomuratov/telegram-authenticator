@@ -1,7 +1,9 @@
 import asyncio
 import requests
 import logging
-from aiogram import Router, types
+import time
+from aiogram import Router, types, F
+from aiogram.exceptions import TelegramBadRequest
 
 
 logging.basicConfig(level=logging.INFO)
@@ -28,54 +30,92 @@ async def send_order_update(order_id: int, status: str):
         logger.error(f"❌ Ошибка при обновлении заказа #{order_id}: {e}")
         logger.info(f"##################################")
 
-@bot_router.callback_query(lambda c: c.data.startswith("accept_order") or c.data.startswith("reject_order"))
-async def handle_order_action(callback_query: types.CallbackQuery):
-    logger.info(f"##################################")
-    logger.info(f"Получен callback: {callback_query.data}")
-    logger.info(f"##################################")
+
+@bot_router.callback_query(F.data.startswith("reject_order"))
+async def action_accept_order(callback_query: types.CallbackQuery):
     try:
-        action, order_id = callback_query.data.split(":", 1)
-        order_id = order_id.strip()
-        logger.info(f"##################################")
-        logger.info(f"Распарсенные данные: action='{action}', order_id='{order_id}'")
-        logger.info(f"##################################")
+        await callback_query.answer("Запрос обработан...") 
+        
+    except TelegramBadRequest as e:
+        logger.error("Ошибка Telegram: %s", e)
+        return
+    try:
+        _, order_id = callback_query.data.split(":", 1)
+        logger.info(f"Извлекаем: order_id='{order_id}'")
     except ValueError as e:
-        logger.info(f"##################################")
         logger.error(f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}")
-        logger.info(f"##################################")
-        await callback_query.answer("Ошибка! Некорректный формат запроса.")
-        return
+    
+    edited_text = f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}\n"
+    logger.info(callback_query.message.text + edited_text)
 
-    if action == "accept_order":
-        text = f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}"
-        status = "prepare"
-    elif action == "reject_order":
-        text = f"❌ Заказ #{order_id} отменил пользователь @{callback_query.from_user.username}"
-        status = "canceled"
-    else:
-        logger.info(f"##################################")
-        logger.error(f"Неизвестное действие: {action}")
-        logger.info(f"##################################")
-        await callback_query.answer("Ошибка! Неизвестное действие.")
-        return
+    
+    text = f"\n\n❌ Заказ #{order_id} отменил пользователь @{callback_query.from_user.username}"
+    logger.info(f"Создали текст: {text}")
 
-    logger.info(f"##################################")
-    logger.info(f"Отправка сообщения: {text}")
-    logger.info(f"##################################")
-    await callback_query.message.reply(text)
+    status = "prepare"
+    logger.info(f"Создали статус: {status}")
+    
+
     
     try:
-        logger.info(f"##################################")
-        logger.info("Удаление inline-клавиатуры (reply_markup)")
-        logger.info(f"##################################")
+        logger.info("Удалили inline-клавиатуры: ✅ Принять")
         await callback_query.message.delete_reply_markup()
-    except Exception as e:
+        logger.info(f"Отправили сообщение: {text}")  
+        await callback_query.message.edit_text(callback_query.message.text+text)
+       
+        
+        
+    except TelegramBadRequest as e:
         logger.info(f"##################################")
-        logger.warning(f"Ошибка при удалении reply_markup: {e}")
+        logger.error("Ошибка Telegram: %s", e)
         logger.info(f"##################################")
-    logger.info(f"##################################")
-    logger.info("Запуск фоновой задачи send_order_update")
-    logger.info(f"##################################")
-    asyncio.create_task(send_order_update(int(order_id), status))
+        return
     
-    await callback_query.answer("ok")
+
+    logger.info("Передаем функцию send_order_update вфоновой задачи")
+    asyncio.create_task(send_order_update(int(order_id), status))    
+
+
+@bot_router.callback_query(F.data.startswith("accept_order"))
+async def action_accept_order(callback_query: types.CallbackQuery):
+    try:
+        await callback_query.answer("Запрос обработан...") 
+        
+    except TelegramBadRequest as e:
+        logger.error("Ошибка Telegram: %s", e)
+        return
+    try:
+        _, order_id = callback_query.data.split(":", 1)
+        logger.info(f"Извлекаем: order_id='{order_id}'")
+    except ValueError as e:
+        logger.error(f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}")
+    
+    edited_text = f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}\n"
+    logger.info(callback_query.message.text + edited_text)
+
+    
+    text = f"\n\n✅ Заказ принял пользователь @{callback_query.from_user.username}"
+    logger.info(f"Создали текст: {text}")
+
+    status = "canceled"
+    logger.info(f"Создали статус: {status}")
+    
+
+    
+    try:
+        logger.info("Удалили inline-клавиатуры: ✅ Принять")
+        await callback_query.message.delete_reply_markup()
+        logger.info(f"Отправили сообщение: {text}")  
+        await callback_query.message.edit_text(callback_query.message.text+text)
+       
+        
+        
+    except TelegramBadRequest as e:
+        logger.info(f"##################################")
+        logger.error("Ошибка Telegram: %s", e)
+        logger.info(f"##################################")
+        return
+    
+
+    logger.info("Передаем функцию send_order_update вфоновой задачи")
+    asyncio.create_task(send_order_update(int(order_id), status)) 

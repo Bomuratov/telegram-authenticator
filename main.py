@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -7,19 +8,24 @@ from api.v1.send_code import router as send_code
 from api.v1.send_notifications import router as send_notify
 
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 origins = ["*"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     url1 = settings.bot.url+settings.bot.path+settings.bot.token
-    print(url1)
+    # print(url1)
     await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}{settings.bot.token}")
-    print("Вебхук успешно установлен")
+    logger.info(f"Вебхук успешно установлен {await bot.get_webhook_info()}")
     yield
-    print("Заканчиваем работу")
+    logger.info("Заканчиваем работу")
+    logger.info(f"Удаляем вебхук {await bot.get_webhook_info()}")
     await bot.delete_webhook()
+    logger.info(f"Вебхук удален: {await bot.get_webhook_info()}")
     await bot.session.close()
+    logger.info(f"Сессия бота закрыт: ")
     # await db_helper.dispose()
 
 

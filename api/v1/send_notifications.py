@@ -107,4 +107,7 @@ export const getStatusChip = (status: string) => {
   }
 };
 
+curl -X GET "https://api.telegram.org/botYOUR_BOT_TOKEN/getWebhookInfo"
+
+
 """
