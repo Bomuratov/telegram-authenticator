@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, status, HTTPException
 import requests
 from aiogram.exceptions import TelegramBadRequest
@@ -7,33 +8,80 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from typing import Dict, Any
 from utils.create_text import create_order
 
-router = APIRouter()
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
+router = APIRouter()
 
 @router.post("/new-order/")
 async def new_order_notification(payload: Dict[str, Any]):
+    logger.info("Получен запрос на новый заказ с payload: %s", payload)
+    try:
+        restaurant_id = payload["restaurant"]
+        order_id = payload["id"]
+        logger.info(f"##################################")
+        logger.info("Извлечены restaurant_id: %s, order_id: %s", restaurant_id, order_id)
+        logger.info(f"##################################")
+    except KeyError as e:
+        logger.info(f"##################################")
+        logger.error("Ошибка извлечения ключей из payload: %s", e)
+        logger.info(f"##################################")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Отсутствует необходимый параметр")
 
-    restaurant_id = payload["restaurant"]
-
-
+    # Формируем клавиатуру с кнопками
     keyboard = InlineKeyboardMarkup(
-            inline_keyboard=[
-                [
-                    InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload['id']}"),
-                    InlineKeyboardButton(text="❌ Отказать", callback_data=f"reject_order:{payload['id']}")
-                ]
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{order_id}"),
+                InlineKeyboardButton(text="❌ Отказать", callback_data=f"reject_order:{order_id}")
             ]
-        )
+        ]
+    )
+    logger.info(f"##################################")
+    logger.info("Сформирована inline-клавиатура: %s", keyboard)
+    logger.info(f"##################################")
 
     try:
-        rest_id = requests.get(url=f"https://stage.aurora-api.uz/api/v1/restaurant/{restaurant_id}/").json()["orders_chat_id"]
-        await bot.send_message(chat_id=rest_id, text=create_order(payload), parse_mode="html", reply_markup=keyboard)
+        # Получаем chat_id ресторана
+        rest_url = f"https://stage.aurora-api.uz/api/v1/restaurant/{restaurant_id}/"
+        logger.info(f"##################################")
+        logger.info("Запрос к REST API ресторана по URL: %s", rest_url)
+        logger.info(f"##################################")
+        rest_response = requests.get(url=rest_url)
+        rest_response.raise_for_status()
+        rest_data = rest_response.json()
+        rest_id = rest_data["orders_chat_id"]
+        logger.info(f"##################################")
+        logger.info("Получен orders_chat_id: %s", rest_id)
+        logger.info(f"##################################")
+
+        # Формируем текст сообщения заказа
+        order_text = create_order(payload)
+        logger.info(f"##################################")
+        logger.info("Сформирован текст заказа: %s", order_text)
+        logger.info(f"##################################")
+
+        # Отправляем сообщение через aiogram
+        await bot.send_message(chat_id=rest_id, text=order_text, parse_mode="html", reply_markup=keyboard)
+        logger.info(f"##################################")
+        logger.info("Сообщение отправлено успешно на chat_id: %s", rest_id)
+        logger.info(f"##################################")
+
         return {
             "message": "Notify has successfully sended",
             "code": 2
-                }
+        }
     except TelegramBadRequest as e:
-        return {"detail": e}
+        logger.info(f"##################################")
+        logger.error("Ошибка Telegram: %s", e)
+        logger.info(f"##################################")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    except requests.RequestException as e:
+        logger.info(f"##################################")
+        logger.error("Ошибка запроса к REST API ресторана: %s", e)
+        logger.info(f"##################################")
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
+
     
 
 
