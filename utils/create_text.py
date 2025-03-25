@@ -22,9 +22,10 @@ from typing import Dict, Any
 
 
 def create_order(messages: Dict[str, Any]):
+    order_id = messages["id"]
     total_price = messages["total_price"]
     products = messages["products"]
-    header = "<b>🟢 —Новый заказ—</b> \n\n"
+    header = f"<b>🟢 Новый заказ #{order_id} </b> \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
     linear = "<b>————————————————</b>\n"
     info = ""
