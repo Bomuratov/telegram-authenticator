@@ -54,6 +54,7 @@ async def verify_signature(request: Request):
 async def handle_github_webhook(request: Request):
     await verify_signature(request)
     data = await request.json()
+    print(data)
     
     if "push" not in request.headers.get("X-GitHub-Event", ""):
         return {"status": "ignored"}
