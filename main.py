@@ -18,10 +18,8 @@ origins = ["*"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    url1 = settings.bot.url+settings.bot.path+settings.bot.token
     await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}{settings.bot.token}")
     logger.info(f"Вебхук успешно установлен {await bot.get_webhook_info()}")
-    task = asyncio.create_task(keep_alive())
     yield
     logger.info("Заканчиваем работу")
     await bot.session.close()
