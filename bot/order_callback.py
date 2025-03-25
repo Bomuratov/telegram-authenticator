@@ -45,11 +45,10 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     except ValueError as e:
         logger.error(f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}")
     
-    edited_text = f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}\n"
-    logger.info(callback_query.message.text + edited_text)
+
 
     
-    text = f"\n\n❌ Заказ #{order_id} отменил пользователь @{callback_query.from_user.username}"
+    text = f"\n\n❌ Заказ #{order_id} отменил пользователь {callback_query.from_user.first_name} {callback_query.from_user.last_name}"
     logger.info(f"Создали текст: {text}")
 
     status = "canceled"
@@ -90,12 +89,9 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         logger.info(f"Извлекаем: order_id='{order_id}'")
     except ValueError as e:
         logger.error(f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}")
-    
-    edited_text = f"✅ Заказ #{order_id} принял пользователь @{callback_query.from_user.username}\n"
-    logger.info(callback_query.message.text + edited_text)
 
     
-    text = f"\n\n✅ Заказ принял пользователь @{callback_query.from_user.username}"
+    text = f"\n\n✅ Заказ #{order_id} принял пользователь {callback_query.from_user.first_name} {callback_query.from_user.last_name}"
     logger.info(f"Создали текст: {text}")
 
     status = "prepare"
