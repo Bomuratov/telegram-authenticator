@@ -54,7 +54,7 @@ async def verify_signature(request: Request):
 async def handle_github_webhook(request: Request):
     await verify_signature(request)
     data = await request.json()
-    print(data)
+
     
     if "push" not in request.headers.get("X-GitHub-Event", ""):
         return {"status": "ignored"}
@@ -66,6 +66,7 @@ async def handle_github_webhook(request: Request):
     commit_url = commit.get("url", "")
     repo_url = data.get("repository", {}).get("html_url", "")
     messages = commit.get("message", "")
+    repo_name = data.get("repository", "").get("name", "")
     
     if timestamp:
         dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
@@ -74,6 +75,7 @@ async def handle_github_webhook(request: Request):
         formatted_time = "N/A"
     message = (
         "💥 <b>Новый коммит!</b>\n"
+        f"🗂 <b>Проект:</b> {repo_name.capitalize()}\n"
         f"👨‍💻 <b>Автор:</b> {author}\n"
         f"🪵 <b>Ветка:</b> {branch.upper()}\n"
         f"📆 <b>Дата:</b> {formatted_time}\n"
