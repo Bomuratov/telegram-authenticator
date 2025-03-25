@@ -33,7 +33,7 @@ async def new_order_notification(payload: Dict[str, Any]):
         inline_keyboard=[
             [
                 InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{order_id}"),
-                InlineKeyboardButton(text="❌ Отказать", callback_data=f"reject_order:{order_id}")
+                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{order_id}")
             ]
         ]
     )
