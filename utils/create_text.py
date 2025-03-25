@@ -25,7 +25,7 @@ def create_order(messages: Dict[str, Any]):
     order_id = messages["id"]
     total_price = messages["total_price"]
     products = messages["products"]
-    header = f"<b>🟢 Новый заказ</b> #{order_id}A \n\n"
+    header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
     linear = "<b>————————————————</b>\n"
     info = ""
