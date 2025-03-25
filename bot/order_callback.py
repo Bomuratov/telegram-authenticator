@@ -52,7 +52,8 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     text = f"\n\n❌ Заказ #{order_id} отменил пользователь @{callback_query.from_user.username}"
     logger.info(f"Создали текст: {text}")
 
-    status = "prepare"
+    status = "canceled"
+
     logger.info(f"Создали статус: {status}")
     
 
@@ -97,7 +98,8 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     text = f"\n\n✅ Заказ принял пользователь @{callback_query.from_user.username}"
     logger.info(f"Создали текст: {text}")
 
-    status = "canceled"
+    status = "prepare"
+
     logger.info(f"Создали статус: {status}")
     
 

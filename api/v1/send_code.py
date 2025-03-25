@@ -36,28 +36,6 @@ async def send_code(payload: CodeSchema):
         }
     
 
-# @router.post("/send/")
-# async def send(phone: str):
-#     code = random.randint(100000, 999999)
-#     phone = encoder(int(phone))
-#     db_redis.setex(f"code_for:{phone}", 900, code)
-
-#     try:
-#         await bot.send_message(chat_id=phone, text=f"Ваш код верификации {code} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
-#         return {
-#             "status": status.HTTP_200_OK,
-#             "detail": "Success"
-#         }
-#     except TelegramBadRequest as e:
-#         return {
-#             "status": status.HTTP_403_FORBIDDEN,
-#             "detail": f"https://t.me/verify_01_bot?start={phone}"
-#         }
-    
-# @router.post("/get_chat_id/")
-# async def get(phone:str, session: AsyncSession = Depends(db_helper.session_getter)):
-#     return await UserCrud.get_chat_id_by_phone(phone, session)
-
 GROUP_ID="-974972939"
 
 async def verify_signature(request: Request):
