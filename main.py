@@ -41,6 +41,6 @@ fapp.add_middleware(
     allow_headers=["*"],
 )
 
-@fapp.get("/health")
-async def health_check():
-    return {"status": "ok"}
+# @fapp.get("/health")
+# async def health_check():
+#     return {"status": "ok"}
