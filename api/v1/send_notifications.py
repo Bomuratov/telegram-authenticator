@@ -28,7 +28,7 @@ async def new_order_notification(payload: Dict[str, Any]):
         logger.info(f"##################################")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Отсутствует необходимый параметр")
 
-    # Формируем клавиатуру с кнопками
+
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
@@ -42,7 +42,6 @@ async def new_order_notification(payload: Dict[str, Any]):
     logger.info(f"##################################")
 
     try:
-        # Получаем chat_id ресторана
         rest_url = f"https://stage.aurora-api.uz/api/v1/restaurant/{restaurant_id}/"
         logger.info(f"##################################")
         logger.info("Запрос к REST API ресторана по URL: %s", rest_url)
@@ -55,13 +54,11 @@ async def new_order_notification(payload: Dict[str, Any]):
         logger.info("Получен orders_chat_id: %s", rest_id)
         logger.info(f"##################################")
 
-        # Формируем текст сообщения заказа
         order_text = create_order(payload)
         logger.info(f"##################################")
         logger.info("Сформирован текст заказа: %s", order_text)
         logger.info(f"##################################")
 
-        # Отправляем сообщение через aiogram
         await bot.send_message(chat_id=rest_id, text=order_text, parse_mode="html", reply_markup=keyboard)
         logger.info(f"##################################")
         logger.info("Сообщение отправлено успешно на chat_id: %s", rest_id)
@@ -75,12 +72,12 @@ async def new_order_notification(payload: Dict[str, Any]):
         logger.info(f"##################################")
         logger.error("Ошибка Telegram: %s", e)
         logger.info(f"##################################")
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     except requests.RequestException as e:
         logger.info(f"##################################")
         logger.error("Ошибка запроса к REST API ресторана: %s", e)
         logger.info(f"##################################")
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
     
 
