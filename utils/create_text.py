@@ -21,12 +21,13 @@ from typing import Dict, Any
 
 
 
-def create_order(messages: Dict[str, Any]):
+def create_order(messages: Dict[str, Any], name: str):
     order_id = messages["id"]
     total_price = messages["total_price"]
     products = messages["products"]
     header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
+    warehouse = f"<b>Склад: {name}</b>"
     linear = "<b>————————————————</b>\n"
     info = ""
     for product in products:
@@ -37,6 +38,7 @@ def create_order(messages: Dict[str, Any]):
         info += line
     full = (
         header
+        + warehouse
         + order
         + linear
         + info

@@ -50,11 +50,12 @@ async def new_order_notification(payload: Dict[str, Any]):
         rest_response.raise_for_status()
         rest_data = rest_response.json()
         rest_id = rest_data["orders_chat_id"]
+        rest_name = rest_data["name"]
         logger.info(f"##################################")
         logger.info("Получен orders_chat_id: %s", rest_id)
         logger.info(f"##################################")
 
-        order_text = create_order(payload)
+        order_text = create_order(messages=payload, name=rest_name)
         logger.info(f"##################################")
         logger.info("Сформирован текст заказа: %s", order_text)
         logger.info(f"##################################")
