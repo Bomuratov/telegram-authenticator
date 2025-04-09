@@ -6,6 +6,9 @@ from config import settings
 from bot.webhook import bot, router
 from api.v1.send_code import router as send_code
 from api.v1.send_notifications import router as send_notify
+from core.hide_logs import setup_custom_logger
+
+setup_custom_logger()
 
 
 logging.basicConfig(level=logging.INFO)
@@ -18,7 +21,6 @@ origins = ["*"]
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}{settings.bot.token}")
-    logger.info(f"Вебхук успешно установлен {await bot.get_webhook_info()}")
     yield
     logger.info("Заканчиваем работу")
     await bot.session.close()
