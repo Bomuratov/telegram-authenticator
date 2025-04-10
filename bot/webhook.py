@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 
-@router.post(f"{settings.bot.path}{settings.bot.token}")
+@router.post(f"{settings.bot.path}")
 async def bot_webhook(update: Update):
 
     await dp.feed_update(bot, update)
