@@ -12,7 +12,13 @@ from typing import Dict, Any
     "lat": "40.7128",
     "long": "-74.0060",
     "user_id": 182,
-    "restaurant": 3,
+    "restaurant": {
+        "id": 1,
+        "name": "string",
+        "photo": "string",
+        "address": "string",
+        "phone": "sda"
+                    },
     "status": "pending",
 }
 
@@ -21,13 +27,15 @@ from typing import Dict, Any
 
 
 
-def create_order(messages: Dict[str, Any], name: str):
+def create_order(messages: Dict[str, Any]):
     order_id = messages["id"]
     total_price = messages["total_price"]
     products = messages["products"]
+    restaurant = messages["restaurant"]
+    rest_name = restaurant["name"]
     header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
-    warehouse = f"<b>Склад: {name}</b>\n\n"
+    warehouse = f"<b>Склад: {rest_name}</b>\n\n"
     linear = "<b>————————————————</b>\n"
     info = ""
     for product in products:
