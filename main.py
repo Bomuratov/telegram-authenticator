@@ -8,7 +8,7 @@ from api.v1.send_code import router as send_code
 from api.v1.send_notifications import router as send_notify
 from core.hide_logs import setup_custom_logger
 
-setup_custom_logger()
+# setup_custom_logger()
 
 
 logging.basicConfig(level=logging.INFO)
