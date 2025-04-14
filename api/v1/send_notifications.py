@@ -42,12 +42,12 @@ async def new_order_notification(payload: Dict[str, Any]):
             ]
         ]
     )
-    logger.info(f"##################################")
-    logger.info("Сформирована inline-клавиатура: %s", keyboard)
-    logger.info(f"##################################")
+    # logger.info(f"##################################")
+    # logger.info("Сформирована inline-клавиатура: %s", keyboard)
+    # logger.info(f"##################################")
 
     try:
-        rest_url = f"https://stage.aurora-api.uz/api/v1/restaurant/{rest_id}/"
+        rest_url = f"https://aurora-api.uz/api/v1/restaurant/{rest_id}/"
 
         logger.info(f"##################################")
         logger.info("Запрос к REST API ресторана по URL: %s", rest_url)
@@ -57,15 +57,19 @@ async def new_order_notification(payload: Dict[str, Any]):
         rest_response.raise_for_status()
         rest_data = rest_response.json()
         rest_chat_id = rest_data["orders_chat_id"]
+        logger.info(f"##################################")
+        logger.info("Получен restaurant_response: %s", rest_data)
+        logger.info(f"##################################")
+
 
         logger.info(f"##################################")
-        logger.info("Получен orders_chat_id: %s", rest_id)
+        logger.info("Получен orders_chat_id: %s", rest_chat_id)
         logger.info(f"##################################")
 
         order_text = create_order(messages=payload)
-        logger.info(f"##################################")
-        logger.info("Сформирован текст заказа: %s", order_text)
-        logger.info(f"##################################")
+        # logger.info(f"##################################")
+        # logger.info("Сформирован текст заказа: %s", order_text)
+        # logger.info(f"##################################")
 
         await bot.send_message(chat_id=rest_chat_id, text=order_text, parse_mode="html", reply_markup=keyboard)
         logger.info(f"##################################")
@@ -89,7 +93,7 @@ async def new_order_notification(payload: Dict[str, Any]):
         logger.info(f"##################################")
         logger.error("Ошибка запроса к REST API ресторана: %s", e)
         logger.info(f"##################################")
-        
+
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
     
