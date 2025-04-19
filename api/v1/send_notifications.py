@@ -47,7 +47,7 @@ async def new_order_notification(payload: Dict[str, Any]):
     # logger.info(f"##################################")
 
     try:
-        rest_url = f"https://aurora-api.uz/api/v1/restaurant/{rest_id}/"
+        rest_url = f"https://new.aurora-api.uz/api/v1/restaurant/{rest_id}/"
 
         logger.info(f"##################################")
         logger.info("Запрос к REST API ресторана по URL: %s", rest_url)
