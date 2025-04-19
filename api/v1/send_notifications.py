@@ -1,11 +1,11 @@
 import logging
-from fastapi import APIRouter, status, HTTPException
 import requests
+from fastapi import APIRouter, status, HTTPException
 from aiogram.exceptions import TelegramBadRequest
-from schemas.notifications import NotifyModel
+from schemas.notifications import PayloadModel
 from bot.commands import bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from typing import Dict, Any
+
 from utils.create_text import create_order
 
 logging.basicConfig(level=logging.INFO)
@@ -13,67 +13,63 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+{
+    "created_by": "Super Admin",
+    "products": [
+        {
+            "id": 77,
+            "name": "Samsung",
+            "photo": "https://new.aurora-api.uz/media/Pasta%20House/category/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B5%20%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0/Samsung.jpeg",
+            "price": 1000,
+            "quantity": 1
+        },
+        {
+            "id": 116,
+            "name": "test",
+            "photo": "https://new.aurora-api.uz/media/Pasta%20House/category/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B5%20%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0/test.jpeg",
+            "price": 20002,
+            "quantity": 1
+        }
+    ],
+    "total_price": 21002,
+    "lat": "40.7128",
+    "long": "-74.0060",
+    "user_id": 1,
+    "orders_chat_id": -974972939,
+    "restaurant": {
+        "id": 1,
+        "name": "Pasta House",
+        "address": "The Tukimachi street",
+        "photo": "https://new.aurora-api.uz/media/Pasta%20House/logo/2024-03-04_12.28.47.jpg",
+        "phone": 998934567890
+    },
+    "status": "new",
+    "id": 80,
+    "created_at": "2025-04-19T18:57:20.195Z",
+    "updated_at": "2025-04-19T18:57:20.195Z"
+}
+
+
+
+
+
 @router.post("/new-order/")
-async def new_order_notification(payload: Dict[str, Any]):
+async def new_order_notification(payload: PayloadModel):
     logger.info("Получен запрос на новый заказ с payload: %s", payload)
-    try:
-        restaurant = payload["restaurant"]
-        rest_id = restaurant["id"]
-        order_id = payload["id"]
-
-        logger.info(f"##################################")
-        logger.info("Извлечены restaurant_id: %s, order_id: %s", restaurant, order_id)
-        logger.info(f"##################################")
-
-    except KeyError as e:
-        
-        logger.info(f"##################################")
-        logger.error("Ошибка извлечения ключей из payload: %s", e)
-        logger.info(f"##################################")
-
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Отсутствует необходимый параметр")
-
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{order_id}"),
-                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{order_id}")
+                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload.id}"),
+                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{payload.id}")
             ]
         ]
     )
-    # logger.info(f"##################################")
-    # logger.info("Сформирована inline-клавиатура: %s", keyboard)
-    # logger.info(f"##################################")
 
     try:
-        rest_url = f"https://new.aurora-api.uz/api/v1/restaurant/{rest_id}/"
-
+        await bot.send_message(chat_id=payload.orders_chat_id, text=create_order(payload), parse_mode="html", reply_markup=keyboard)
         logger.info(f"##################################")
-        logger.info("Запрос к REST API ресторана по URL: %s", rest_url)
-        logger.info(f"##################################")
-
-        rest_response = requests.get(url=rest_url)
-        rest_response.raise_for_status()
-        rest_data = rest_response.json()
-        rest_chat_id = rest_data["orders_chat_id"]
-        logger.info(f"##################################")
-        logger.info("Получен restaurant_response: %s", rest_data)
-        logger.info(f"##################################")
-
-
-        logger.info(f"##################################")
-        logger.info("Получен orders_chat_id: %s", rest_chat_id)
-        logger.info(f"##################################")
-
-        order_text = create_order(messages=payload)
-        # logger.info(f"##################################")
-        # logger.info("Сформирован текст заказа: %s", order_text)
-        # logger.info(f"##################################")
-
-        await bot.send_message(chat_id=rest_chat_id, text=order_text, parse_mode="html", reply_markup=keyboard)
-        logger.info(f"##################################")
-        logger.info("Сообщение отправлено успешно на chat_id: %s", rest_chat_id)
+        logger.info("Сообщение отправлено успешно на chat_id: %s", payload.orders_chat_id)
         logger.info(f"##################################")
 
         return {

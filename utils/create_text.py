@@ -1,4 +1,5 @@
 from typing import Dict, Any
+from schemas.notifications import PayloadModel
 {
     "id": 1,
     "created_at": "2025-03-23T17:49:37.607Z",
@@ -27,15 +28,21 @@ from typing import Dict, Any
 
 
 
-def create_order(messages: Dict[str, Any]):
-    order_id = messages["id"]
-    total_price = messages["total_price"]
-    products = messages["products"]
-    restaurant = messages["restaurant"]
+def create_order(payload: PayloadModel):
+    print(payload)
+    order_id = payload.id
+    total_price = payload.total_price
+    products = payload.products
+    restaurant = payload.restaurant
     rest_name = restaurant["name"]
+    lat = payload.lat  # например, 41.2995
+    long = payload.long  # например, 69.2401
+    location_link = f""
     header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
     warehouse = f"<b>Склад: {rest_name}</b>\n\n"
+    created_by = f"<b>Заказал: {payload.created_by}</b>\n\n"
+    location_info = f"📍<b>Адрес доставки:</b> <a href='https://maps.google.com/?q={lat},{long}'>link</a>\n\n"
     linear = "<b>————————————————</b>\n"
     info = ""
     for product in products:
@@ -47,6 +54,8 @@ def create_order(messages: Dict[str, Any]):
     full = (
         header
         + warehouse
+        + created_by
+        + location_info 
         + order
         + linear
         + info
@@ -54,5 +63,6 @@ def create_order(messages: Dict[str, Any]):
         + f"<b>💳 Итого: {total_price}</b>\n"
     )
     return full
+
 
 
