@@ -61,7 +61,11 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         logger.info("Удалили inline-клавиатуры: ✅ Принять")
         await callback_query.message.delete_reply_markup()
         logger.info(f"Отправили сообщение: {text}")  
-        await callback_query.message.edit_text(callback_query.message.text+text)
+        await callback_query.message.edit_text(
+            callback_query.message.text+text,
+            parse_mode="HTML",
+            disable_web_page_preview=True
+            )
        
         
         
@@ -104,7 +108,11 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         logger.info("Удалили inline-клавиатуры: ✅ Принять")
         await callback_query.message.delete_reply_markup()
         logger.info(f"Отправили сообщение: {text}")  
-        await callback_query.message.edit_text(callback_query.message.text+text)
+        await callback_query.message.edit_text(
+            callback_query.message.text+text,
+            parse_mode="HTML",
+            disable_web_page_preview=True
+            )
 
        
         

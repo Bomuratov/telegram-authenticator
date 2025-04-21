@@ -42,7 +42,12 @@ def create_order(payload: PayloadModel):
     order = "<b>🧾  Состав заказа:</b>\n"
     warehouse = f"<b>Склад: {rest_name}</b>\n\n"
     created_by = f"<b>Заказал: {payload.created_by}</b>\n\n"
-    location_info = f"📍<b>Адрес доставки:</b> <a href='https://maps.google.com/?q={lat},{long}'>link</a>\n\n"
+    location_info = (
+    f"📍<b>Адрес доставки:</b>\n"
+    f"🔹 <a href='https://maps.telegram.org/?lat={lat}&lng={long}'>Открыть в Telegram</a>\n"
+    f"🔹 <a href='yandexnavi://build_route_on_map?lat_to={lat}&lon_to={long}'>Яндекс Навигатор</a>\n"
+    f"🔹 <a href='https://maps.google.com/?q={lat},{long}'>Google Maps</a>\n\n"
+)
     linear = "<b>————————————————</b>\n"
     info = ""
     for product in products:
