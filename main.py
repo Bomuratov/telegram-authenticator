@@ -20,12 +20,12 @@ origins = ["*"]
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    logger.info("установка вебхука")
     await bot.set_webhook(f"{settings.bot.url}{settings.bot.path}")
     yield
     logger.info("Заканчиваем работу")
     await bot.session.close()
     logger.info(f"Сессия бота закрыт: ")
-    # await db_helper.dispose()
 
 
 fapp = FastAPI(lifespan=lifespan, root_path="/fastapi")
@@ -42,7 +42,3 @@ fapp.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# @fapp.get("/health")
-# async def health_check():
-#     return {"status": "ok"}

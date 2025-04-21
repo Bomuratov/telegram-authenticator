@@ -13,7 +13,7 @@ bot_router = Router()
 
 async def send_order_update(order_id: int, status: str):
     """Фоновая задача для отправки PUT-запроса на backend"""
-    url = f"https://backend.aurora-app.uz/api/orders/update/{order_id}/"
+    url = f"https://new.aurora-api.uz/api-node/api/orders/update/{order_id}/"
     headers = {'Content-Type': 'application/json'}
     data = {"status": status}
 
