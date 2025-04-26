@@ -17,6 +17,7 @@ async def send_message(message: types.Message):
     )
 
 
+
 @dp.message(Command("start"))
 async def send_message(message: types.Message):
     phone_id = message.text[7:]
