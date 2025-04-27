@@ -19,7 +19,7 @@ async def send_message(message: types.Message):
 @dp.message(Command("check"))
 async def send_message(message: types.Message):
     return await bot.send_message(
-        chat_id=message.chat.id, text=f"status : ok\n code : 200"
+        chat_id=message.chat.id, text=f"status : ok\ncode : 200"
     )
 
 
