@@ -16,6 +16,11 @@ async def send_message(message: types.Message):
         chat_id=message.chat.id, text=f"Твой айди {message.chat.id}"
     )
 
+@dp.message(Command("check"))
+async def send_message(message: types.Message):
+    return await bot.send_message(
+        chat_id=message.chat.id, text=f"status : ok\n code : 200"
+    )
 
 
 @dp.message(Command("start"))

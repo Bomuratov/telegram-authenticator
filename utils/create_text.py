@@ -37,17 +37,10 @@ def create_order(payload: PayloadModel):
     rest_name = restaurant["name"]
     lat = payload.lat  # например, 41.2995
     long = payload.long  # например, 69.2401
-    location_link = f""
     header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
     warehouse = f"<b>Склад: {rest_name}</b>\n\n"
     created_by = f"<b>Заказал: {payload.created_by}</b>\n\n"
-    location_info = (
-    f"📍<b>Адрес доставки:</b>\n"
-    f"🔹 <a href='https://maps.telegram.org/?lat={lat}&lng={long}'>Открыть в Telegram</a>\n"
-    f"🔹 <a href='yandexnavi://build_route_on_map?lat_to={lat}&lon_to={long}'>Яндекс Навигатор</a>\n"
-    f"🔹 <a href='https://maps.google.com/?q={lat},{long}'>Google Maps</a>\n\n"
-)
     linear = "<b>————————————————</b>\n"
     info = ""
     for product in products:
@@ -60,7 +53,6 @@ def create_order(payload: PayloadModel):
         header
         + warehouse
         + created_by
-        + location_info 
         + order
         + linear
         + info
