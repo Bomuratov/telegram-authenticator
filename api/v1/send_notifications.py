@@ -2,11 +2,11 @@ import logging
 import requests
 from fastapi import APIRouter, status, HTTPException
 from aiogram.exceptions import TelegramBadRequest
-from schemas.notifications import PayloadModel
+from schemas.notifications import PayloadModel, AcceptOrderModel
 from bot.commands import bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from utils.create_text import create_order
+from utils.create_text import create_order, accept_text
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -93,6 +93,25 @@ async def new_order_notification(payload: PayloadModel):
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
     
+@router.post("/accept-order/")
+async def accept_order(payload: AcceptOrderModel):
+    try:
+        await bot.send_message(chat_id=payload.orders_chat_id, 
+                               text=accept_text(payload=payload),
+                               parse_mode='HTML')
+        return {
+            "message": "Уведомление успешно отправлено",
+            "code" : 2
+        }
+    except TelegramBadRequest as e:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except requests.RequestException as e:
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
+    
+
+
+
 
 
 """"

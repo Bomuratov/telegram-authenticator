@@ -126,3 +126,8 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
     asyncio.create_task(send_order_update(int(order_id), status)) 
+
+
+
+
+

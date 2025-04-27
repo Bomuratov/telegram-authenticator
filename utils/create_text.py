@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from schemas.notifications import PayloadModel
+from schemas.notifications import PayloadModel, AcceptOrderModel
 {
     "id": 1,
     "created_at": "2025-03-23T17:49:37.607Z",
@@ -22,6 +22,7 @@ from schemas.notifications import PayloadModel
                     },
     "status": "pending",
 }
+
 
 
 
@@ -61,5 +62,14 @@ def create_order(payload: PayloadModel):
     )
     return full
 
+
+def accept_text(payload: AcceptOrderModel):
+    order_id = payload.id
+    courier_name = payload.courier.first_name +" "+ payload.courier.last_name
+    header = f"<b>✅ Заказ</b> #{order_id}A принят.\n"
+    body = f"🚖 Курьер: <b>{courier_name}</b>\n"
+    footer = "🍔 Статус: <b>Готовится</b>"
+
+    return header + body + footer
 
 

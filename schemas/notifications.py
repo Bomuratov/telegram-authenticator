@@ -21,3 +21,13 @@ class PayloadModel(BaseModel):
     products: List[dict]
 
 
+class CourierModel(BaseModel):
+    first_name: str
+    last_name: str
+
+
+class AcceptOrderModel(BaseModel):
+    id: int
+    orders_chat_id: str
+    courier: CourierModel
+
