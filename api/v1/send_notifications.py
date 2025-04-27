@@ -93,7 +93,7 @@ async def new_order_notification(payload: PayloadModel):
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
     
-@router.post("/accept-order/")
+@router.post("/accept-order")
 async def accept_order(payload: AcceptOrderModel):
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, 
