@@ -95,6 +95,9 @@ async def new_order_notification(payload: PayloadModel):
     
 @router.post("/accept-order")
 async def accept_order(payload: AcceptOrderModel):
+    logger.info(f"##################################")
+    logger.info("Получен запрос на принятие заказа с payload: %s", payload)
+    logger.info(f"##################################")
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, 
                                text=accept_text(payload=payload),
@@ -140,3 +143,43 @@ curl -X GET "https://api.telegram.org/botYOUR_BOT_TOKEN/getWebhookInfo"
 
 
 """
+
+
+
+
+
+
+{
+    "id": 194,
+    "created_at": "2025-04-27T22:06:32.810Z",
+    "updated_at": "2025-04-27T22:07:06.297Z",
+    "created_by": None,
+    "user_id": 2,
+    "restaurant": 1,
+    "products": [
+        {
+            "id": 77,
+            "name": "Samsung",
+            "photo": "https://new.aurora-api.uz/media/Pasta%20House/category/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B5%20%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0/Samsung.jpeg",
+            "price": 1000,
+            "options": {
+                "id": 1,
+                "size": "test",
+                "price": 1000
+            },
+            "quantity": 1
+        },
+        {
+            "id": 116,
+            "photo": "https://new.aurora-api.uz/media/Pasta%20House/category/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B5%20%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0/test.jpeg",
+            "name": "test",
+            "price": 20002,
+            "options": {
+                "id": 1,
+                "size": "test",
+                "price": 1000
+            },
+            "quantity": 1
+        }
+    ]
+}
