@@ -70,7 +70,7 @@ def accept_text(payload: AcceptOrderModel):
     header = f"<b>✅ Заказ</b> #{order_id}A принят.\n"
     body = f"🚖 Курьер: <b>{courier_name}</b>\n"
     contact = f"📞 Номер курьера: <b>{phone_number}</b>\n"
-    time = f"🕒 Время принятия: <b>{payload.courier.accepted_at.strftime("%d.%m.%Y, %H:%M")}</b>\n"
+    time = f'🕒 Время принятия: <b>{payload.courier.accepted_at.strftime("%d.%m.%Y, %H:%M")}</b>\n'
     footer = "🍔 Статус: <b>Готовится</b>"
 
     return header + body + contact + time + footer
