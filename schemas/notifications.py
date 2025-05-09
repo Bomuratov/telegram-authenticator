@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Dict, Any, List
+from datetime import datetime
 
 
 class NotifyModel(BaseModel):
@@ -22,12 +23,15 @@ class PayloadModel(BaseModel):
 
 
 class CourierModel(BaseModel):
-    first_name: str
-    last_name: str
+    id: int
+    username: str
+    phone_number: str
+    accepted_at: datetime
 
 
 class AcceptOrderModel(BaseModel):
     id: int
     orders_chat_id: str
     courier: CourierModel
+
 
