@@ -94,13 +94,14 @@ async def new_order_notification(payload: PayloadModel):
 
     
 @router.post("/accept-order")
-async def accept_order(payload: AcceptOrderModel):
+async def accept_order(payload: dict):
     logger.info(f"##################################")
     logger.info("Получен запрос на принятие заказа с payload: %s", payload)
     logger.info(f"##################################")
     try:
-        await bot.send_message(chat_id=payload.orders_chat_id, 
-                               text=accept_text(payload=payload),
+        await bot.send_message(chat_id=payload["orders_chat_id"], 
+                            #    text=accept_text(payload=payload),
+                               text=payload,
                                parse_mode='HTML')
         return {
             "message": "Уведомление успешно отправлено",
