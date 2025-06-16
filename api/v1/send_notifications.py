@@ -55,7 +55,7 @@ router = APIRouter()
 
 @router.post("/new-order/")
 async def new_order_notification(payload: PayloadModel):
-    logger.info("Получен запрос на новый заказ с payload: %s", payload)
+    # logger.info("Получен запрос на новый заказ с payload: %s", payload)
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
@@ -69,7 +69,7 @@ async def new_order_notification(payload: PayloadModel):
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, text=create_order(payload), parse_mode="html", reply_markup=keyboard)
         logger.info(f"##################################")
-        logger.info("Сообщение отправлено успешно на chat_id: %s", payload.orders_chat_id)
+        # logger.info("Сообщение отправлено успешно на chat_id: %s", payload.orders_chat_id)
         logger.info(f"##################################")
 
         return {
@@ -96,7 +96,7 @@ async def new_order_notification(payload: PayloadModel):
 @router.post("/accept-order")
 async def accept_order(payload: AcceptOrderModel):
     logger.info(f"##################################")
-    logger.info("Получен запрос на принятие заказа с payload: %s", payload)
+    # logger.info("Получен запрос на принятие заказа с payload: %s", payload)
     logger.info(f"##################################")
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, 
@@ -111,75 +111,8 @@ async def accept_order(payload: AcceptOrderModel):
     
     except requests.RequestException as e:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
-    
 
 
 
 
 
-""""
-
-import { AccessTime, Close, DoneOutlined, Kitchen, Fastfood } from "@mui/icons-material";
-import { Chip } from "@mui/material";
-
-export const getStatusChip = (status: string) => {
-  switch (status) {
-    case "new":
-      return <Chip label="Новый" color="success" icon={<Fastfood />} />;
-    case "completed":
-      return <Chip label="Готово" color="success" icon={<DoneOutlined />} />;
-    case "pending":
-      return <Chip label="Ожидание" color="secondary" icon={<AccessTime />} />;
-    case "canceled":
-      return <Chip label="Отменено" color="error" icon={<Close />} />;
-    case "prepare":
-      return <Chip label="Готовиться" color="warning" icon={<Kitchen />} />;
-    default:
-      return <Chip label="Неизвестно" />;
-  }
-};
-
-curl -X GET "https://api.telegram.org/botYOUR_BOT_TOKEN/getWebhookInfo"
-
-
-"""
-
-
-
-
-
-
-{
-    "id": 194,
-    "created_at": "2025-04-27T22:06:32.810Z",
-    "updated_at": "2025-04-27T22:07:06.297Z",
-    "created_by": None,
-    "user_id": 2,
-    "restaurant": 1,
-    "products": [
-        {
-            "id": 77,
-            "name": "Samsung",
-            "photo": "https://new.aurora-api.uz/media/Pasta%20House/category/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B5%20%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0/Samsung.jpeg",
-            "price": 1000,
-            "options": {
-                "id": 1,
-                "size": "test",
-                "price": 1000
-            },
-            "quantity": 1
-        },
-        {
-            "id": 116,
-            "photo": "https://new.aurora-api.uz/media/Pasta%20House/category/%D0%9F%D0%B5%D1%80%D0%B2%D1%8B%D0%B5%20%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0/test.jpeg",
-            "name": "test",
-            "price": 20002,
-            "options": {
-                "id": 1,
-                "size": "test",
-                "price": 1000
-            },
-            "quantity": 1
-        }
-    ]
-}
