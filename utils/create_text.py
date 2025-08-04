@@ -4,11 +4,12 @@ from schemas.notifications import PayloadModel, AcceptOrderModel
 
 
 #   "options": {"id": 92, "name": "0,7", "price": 12000, "is_active": True},
+# "delivery_price": 5200,
+# "comment": "test test",
 
 
 
 def create_order(payload: PayloadModel):
-    # print(payload)
     order_id = payload.id
     total_price = payload.total_price
     products = payload.products
@@ -19,9 +20,11 @@ def create_order(payload: PayloadModel):
     header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
     warehouse = f"<b>Склад: {rest_name}</b>\n\n"
-    created_by = f"<b>Заказал: {payload.created_by}</b>\n\n"
+    created_by = f"<b>Заказал: {payload.created_by} {payload.user_phone_number}</b>\n\n"
     linear = "<b>————————————————</b>\n"
     info = ""
+    comment = f"Комментарий к заказу: {payload.comment}"
+    delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
     # if options:
     #     for product in products:
     #         name = product["name"]
@@ -55,6 +58,8 @@ def create_order(payload: PayloadModel):
         + info
         + linear
         + f"<b>💳 Итого: {total_price}</b>\n"
+        + linear
+        + comment
     )
     return full
 

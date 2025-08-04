@@ -8,6 +8,8 @@ class NotifyModel(BaseModel):
     body: Dict[str, Any]
 
 
+
+
 class PayloadModel(BaseModel):
     id: int
     created_by: str
@@ -20,6 +22,11 @@ class PayloadModel(BaseModel):
     updated_at: str
     restaurant: dict
     products: List[dict]
+    created_at: str
+    comment: str
+    delivery_price: int
+    user_phone_number: str
+
 
 
 class CourierModel(BaseModel):
