@@ -57,7 +57,7 @@ def create_order(payload: PayloadModel):
         + linear
         + info
         + linear
-        + f"<b>💳 Итого: {total_price}</b>\n"
+        + f"<b>💳 Итого: {total_price} UZS</b>\n"
         + linear
         + comment
     )
