@@ -48,7 +48,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 
 
     
-    text = f"\n\n❌ Заказ #{order_id} отменил пользователь {callback_query.from_user.first_name} {callback_query.from_user.last_name}"
+    text = f"\n\n❌ Заказ #{order_id} отменил пользователь {callback_query.from_user.first_name if callback_query.from_user.first_name else " "} {callback_query.from_user.last_name if callback_query.from_user.last_name else " "}"
     logger.info(f"Создали текст: {text}")
 
     status = "canceled"
@@ -95,7 +95,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         logger.error(f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}")
 
     
-    text = f"\n\n✅ Заказ #{order_id} принял пользователь {callback_query.from_user.first_name} {callback_query.from_user.last_name} статус заказа изменен на «Ожидает курьера»"
+    text = f"\n\n✅ Заказ #{order_id} принял пользователь {callback_query.from_user.first_name if callback_query.from_user.first_name else " "} {callback_query.from_user.last_name if callback_query.from_user.last_name else " "} статус заказа изменен на «Ожидает курьера»"
     logger.info(f"Создали текст: {text}")
 
     status = "awaiting_courier"
