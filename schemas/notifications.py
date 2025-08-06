@@ -7,20 +7,20 @@ class NotifyModel(BaseModel):
     restaurant_id: int
     body: Dict[str, Any]
 
-class Location(BaseModel):
-    id: int
-    lat: str
-    long: str
-    address: Optional[str]
-    street: Optional[str]
-    name: Optional[str]
-    house: Optional[str]
-    apartment: Optional[str]
-    floor: Optional[str]
-    entrance: Optional[str]
-    comment: Optional[str]
-    comment: bool
-    user: int
+# class Location(BaseModel):
+#     id: int
+#     lat: str
+#     long: str
+#     address: Optional[str]
+#     street: Optional[str]
+#     name: Optional[str]
+#     house: Optional[str]
+#     apartment: Optional[str]
+#     floor: Optional[str]
+#     entrance: Optional[str]
+#     comment: Optional[str]
+#     comment: bool
+#     user: int
 
 
 class PayloadModel(BaseModel):
