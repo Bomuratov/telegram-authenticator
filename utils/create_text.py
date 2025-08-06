@@ -20,12 +20,12 @@ def create_order(payload: PayloadModel):
     header = f"<b>Заказ</b> #{order_id}A \n\n"
     order = "<b>🧾  Состав заказа:</b>\n"
     warehouse = f"<b>Склад: {rest_name}</b>\n\n"
-    created_by = f"<b>Заказал: {payload.created_by} {payload.user_phone_number}</b>\n\n"
+    created_by = f"<b>Заказал: {payload.created_by} {payload.user_phone_number}</b>\n"
     linear = "<b>————————————————</b>\n"
     info = ""
     comment = f"Комментарий к заказу: {payload.comment}"
     delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
-    location = f"\nАдрес доставки: {payload.location['address'] if payload.location['address'] else ''}"
+    location = f"Адрес доставки: {payload.location['address'] if payload.location['address'] else ''}\n\n"
     # if options:
     #     for product in products:
     #         name = product["name"]
