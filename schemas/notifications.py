@@ -39,7 +39,7 @@ class PayloadModel(BaseModel):
     comment: str
     delivery_price: int
     user_phone_number: str
-    location: Location
+    location: dict
 
 
 
