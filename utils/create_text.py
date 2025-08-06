@@ -25,6 +25,7 @@ def create_order(payload: PayloadModel):
     info = ""
     comment = f"Комментарий к заказу: {payload.comment}"
     delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
+    location = f"\nАдрес доставки: {payload.location.address if payload.location.address else ""}"
     # if options:
     #     for product in products:
     #         name = product["name"]
@@ -53,6 +54,7 @@ def create_order(payload: PayloadModel):
         header
         + warehouse
         + created_by
+        + location
         + order
         + linear
         + info
