@@ -24,7 +24,8 @@ def create_order(payload: PayloadModel):
     created_by = f"<b>Заказал: {payload.created_by} {payload.user_phone_number}</b>\n"
     linear = "<b>————————————————</b>\n"
     info = ""
-    comment = f"⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>"
+    comment = f"⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else "⚠️ Комментарий к заказу:\n<b></b>"
+
     delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
     location = f"Адрес доставки: {payload.location['address'] if payload.location['address'] else ''}\n\n"
     # if options:
@@ -62,7 +63,7 @@ def create_order(payload: PayloadModel):
         + linear
         + f"<b>💳 Итого: {total_price} UZS</b>\n"
         + linear
-        + comment
+        + comment or None
     )
     return full
 
