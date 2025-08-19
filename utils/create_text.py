@@ -1,9 +1,10 @@
 from typing import Dict, Any
 from schemas.notifications import PayloadModel, AcceptOrderModel
+from zoneinfo import ZoneInfo
 
 
 
-#   "options": {"id": 92, "name": "0,7", "price": 12000, "is_active": True},
+# "options": {"id": 92, "name": "0,7", "price": 12000, "is_active": True},
 # "delivery_price": 5200,
 # "comment": "test test",
 
@@ -23,7 +24,7 @@ def create_order(payload: PayloadModel):
     created_by = f"<b>Заказал: {payload.created_by} {payload.user_phone_number}</b>\n"
     linear = "<b>————————————————</b>\n"
     info = ""
-    comment = f"Комментарий к заказу: {payload.comment}"
+    comment = f"⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>"
     delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
     location = f"Адрес доставки: {payload.location['address'] if payload.location['address'] else ''}\n\n"
     # if options:
@@ -40,7 +41,7 @@ def create_order(payload: PayloadModel):
         if options:
             name = product["name"]
             quantity = product["quantity"]
-            price = product["price"]
+            price = product["options"]["price"] or product["price"]
             line = f"<b>—— {name} ({options['name']}) х {quantity} от {price} сум.</b>\n"
             info += line
         else:
@@ -73,10 +74,12 @@ def accept_text(payload: AcceptOrderModel):
     header = f"<b>✅ Заказ</b> #{order_id}A принят.\n"
     body = f"🚖 Курьер: <b>{courier_name}</b>\n"
     contact = f"📞 Номер курьера: <b>{phone_number}</b>\n"
-    time = f'🕒 Время принятия: <b>{payload.courier.accepted_at.strftime("%d.%m.%Y, %H:%M")}</b>\n'
+    time_tashkent = payload.courier.accepted_at.astimezone(ZoneInfo("Asia/Tashkent"))
+    formatted_time = time_tashkent.strftime("%d.%m.%Y, %H:%M")
+    text = f'🕒 Время принятия: <b>{formatted_time}</b>\n'
     footer = "🍔 Статус: <b>Готовится</b>"
 
-    return header + body + contact + time + footer
+    return header + body + contact + text + footer
 
 
 

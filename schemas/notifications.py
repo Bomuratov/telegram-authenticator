@@ -55,15 +55,20 @@ class AcceptOrderModel(BaseModel):
     orders_chat_id: str
     courier: CourierModel
 
-
 # {
-#     "created_by": "Мўмин XXX",
+#     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [
 #         {
-#             "id": 18,
-#             "photo": "https://new.aurora-api.uz/media/Olivia/category/%D0%A1%D0%B0%D0%BB%D0%B0%D1%82%D1%8B/%D0%A6%D0%B5%D0%B7%D0%B0%D1%80%D1%8C.jpg",
-#             "name": "Цезарь",
-#             "price": 35000,
+#             "id": 17,
+#             "name": "Греческий",
+#             "price": 25000,
+#             "photo": "https://new.aurora-api.uz/media/Olivia/category/%D0%A1%D0%B0%D0%BB%D0%B0%D1%82%D1%8B/%D0%93%D1%80%D0%B5%D1%87%D0%B5%D1%81%D0%BA%D0%B8%D0%B9.jpg",
+#             "options": {
+#                 "id": 89,
+#                 "name": "1",
+#                 "price": 45000,
+#                 "is_active": true
+#             },
 #             "quantity": 1
 #         },
 #         {
@@ -74,11 +79,11 @@ class AcceptOrderModel(BaseModel):
 #             "quantity": 1
 #         }
 #     ],
-#     "total_price": 268500,
-#     "lat": "39.756475783906225",
-#     "long": "64.41936492919922",
-#     "user_id": 126,
-#     "user_phone_number": "+998931430777",
+#     "total_price": 278500,
+#     "lat": "39.74683768921751",
+#     "long": "64.41118611988594",
+#     "user_id": 2,
+#     "user_phone_number": "+998934733223",
 #     "orders_chat_id": -1002641409178,
 #     "restaurant": {
 #         "id": 3,
@@ -90,30 +95,30 @@ class AcceptOrderModel(BaseModel):
 #         "long": "64.4454786"
 #     },
 #     "location": {
-#         "id": 144,
-#         "lat": "39.756475783906225",
-#         "long": "64.41936492919922",
-#         "address": "Каюма Муртазаева улица, Million, 4 микрорайон, Утрар",
+#         "id": 150,
+#         "lat": "39.74683768921751",
+#         "long": "64.41118611988594",
+#         "address": "улица Абдулазима Сами, 5Б микрорайон",
 #         "street": null,
-#         "name": "",
+#         "name": "Дом",
 #         "house": null,
-#         "apartment": "",
-#         "floor": "",
-#         "entrance": "",
+#         "apartment": "1",
+#         "floor": "3",
+#         "entrance": "10",
 #         "comment": "",
 #         "is_active": true,
-#         "user": 126
+#         "user": 2
 #     },
 #     "status": "new",
 #     "destination": {
-#         "distance": "3.4 km",
-#         "duration": "9 mins"
+#         "distance": "6.3 km",
+#         "duration": "14 mins"
 #     },
 #     "delivery_price": 0,
 #     "comment": "",
 #     "courier": null,
 #     "fee": 3500,
-#     "id": 1543,
-#     "created_at": "2025-08-06T10:38:01.568Z",
-#     "updated_at": "2025-08-06T10:38:01.568Z"
+#     "id": 1578,
+#     "created_at": "2025-08-19T04:32:56.226Z",
+#     "updated_at": "2025-08-19T04:32:56.226Z"
 # }
