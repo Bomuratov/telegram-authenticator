@@ -53,7 +53,7 @@ router = APIRouter()
 
 
 
-@router.post("/new-order/")
+@router.post("/new-order")
 async def new_order_notification(payload: PayloadModel):
     # logger.info("Получен запрос на новый заказ с payload: %s", payload)
 
