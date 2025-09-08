@@ -1,6 +1,6 @@
 from aiogram import types, Bot, Dispatcher
 from aiogram.filters import Command
-from config import settings, db_redis
+from config import settings
 from .order_callback import bot_router
 
 

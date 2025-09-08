@@ -1,6 +1,6 @@
 import random
 from fastapi import APIRouter, status, Depends, Request, HTTPException
-from config import db_redis
+# from config import db_redis
 from bot.commands import bot
 from aiogram.exceptions import TelegramBadRequest
 from utils.encode import encoder
@@ -15,25 +15,25 @@ from datetime import datetime
 
 router = APIRouter()
 
-@router.post("/send_code/")
-async def send_code(payload: CodeSchema):
+# @router.post("/send_code/")
+# async def send_code(payload: CodeSchema):
 
-    user_id = encoder(int(payload.user_id))
-    user_phone = payload.user_id
-    print(user_phone)
-    db_redis.setex(f"verification:{user_id}", 900, payload.data)
+#     user_id = encoder(int(payload.user_id))
+#     user_phone = payload.user_id
+#     print(user_phone)
+#     # db_redis.setex(f"verification:{user_id}", 900, payload.data)
     
-    try:
-        await bot.send_message(chat_id=user_id, text=f"Ваш код верификации {payload.data} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
-        return {
-            "status": status.HTTP_200_OK,
-            "detail": "Success"
-        }
-    except TelegramBadRequest as e:
-        return {
-            "status": status.HTTP_403_FORBIDDEN,
-            "detail": f"https://t.me/aurora_auth_bot?start={user_id}"
-        }
+#     try:
+#         await bot.send_message(chat_id=user_id, text=f"Ваш код верификации {payload.data} не сообщите его никому. Данный код действителен в течении 15 минут", parse_mode="HTML")
+#         return {
+#             "status": status.HTTP_200_OK,
+#             "detail": "Success"
+#         }
+#     except TelegramBadRequest as e:
+#         return {
+#             "status": status.HTTP_403_FORBIDDEN,
+#             "detail": f"https://t.me/aurora_auth_bot?start={user_id}"
+#         }
     
 
 GROUP_ID="-974972939"
