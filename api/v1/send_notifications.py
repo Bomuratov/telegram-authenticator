@@ -59,9 +59,6 @@ async def new_order_notification(payload: PayloadModel, request: Request):
     print(request.headers.get("X-Forwarded-Host"))
     client_url = request.headers.get("X-Forwarded-Host")
 
-    print(request.client.host)
-    print(request.client.port)
-    print(request.client)
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
