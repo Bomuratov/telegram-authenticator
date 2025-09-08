@@ -87,12 +87,12 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    if base_url == "stage":
-        logger.info("Запуск функции для стейдж сервера")
-        asyncio.create_task(send_stage_order_update(int(order_id), status))
-    if base_url == "prod":
-        logger.info("Запуск функции для прод сервера")
-        asyncio.create_task(send_order_update(int(order_id), status))    
+    # if base_url == "stage":
+    #     logger.info("Запуск функции для стейдж сервера")
+    #     asyncio.create_task(send_stage_order_update(int(order_id), status))
+    # if base_url == "prod":
+    logger.info("Запуск функции для прод сервера")
+    asyncio.create_task(send_order_update(int(order_id), status))    
 
 
 @bot_router.callback_query(F.data.startswith("accept_order"))
@@ -139,12 +139,12 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    if base_url == "http://localhost:8000/fastapi/":
-        logger.info("Запуск функции для стейдж сервера")
-        asyncio.create_task(send_stage_order_update(int(order_id), status)) 
-    if base_url == "https://new.aurora-api.uz/api-node":
-        logger.info("Запуск функции для прод сервера")
-        asyncio.create_task(send_order_update(int(order_id), status)) 
+    # if base_url == "http://localhost:8000/fastapi/":
+    #     logger.info("Запуск функции для стейдж сервера")
+    #     asyncio.create_task(send_stage_order_update(int(order_id), status)) 
+    # if base_url == "https://new.aurora-api.uz/api-node":
+    logger.info("Запуск функции для прод сервера")
+    asyncio.create_task(send_order_update(int(order_id), status)) 
 
 
 
