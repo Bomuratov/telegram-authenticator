@@ -69,9 +69,6 @@ async def new_order_notification(payload: PayloadModel, request: Request):
 
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, text=create_order(payload), parse_mode="html", reply_markup=keyboard)
-        logger.info(f"##################################")
-        logger.info("Сообщение отправлено успешно на chat_id: %s", payload.orders_chat_id)
-        logger.info(f"##################################")
 
         return {
             "message": "Notify has successfully sended",
@@ -79,26 +76,19 @@ async def new_order_notification(payload: PayloadModel, request: Request):
         }
     except TelegramBadRequest as e:
         
-        logger.info(f"##################################")
         logger.error("Ошибка Telegram: %s", e)
-        logger.info(f"##################################")
 
         return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
     
     except requests.RequestException as e:
         
-        logger.info(f"##################################")
         logger.error("Ошибка запроса к REST API ресторана: %s", e)
-        logger.info(f"##################################")
 
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
     
 @router.post("/accept-order")
 async def accept_order(payload: AcceptOrderModel):
-    logger.info(f"##################################")
-    logger.info("Получен запрос на принятие заказа с payload: %s", payload)
-    logger.info(f"##################################")
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, 
                                text=accept_text(payload=payload),
