@@ -87,10 +87,10 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    if base_url == "https://stage.aurora-api.uz/api-node":
+    if base_url == "stage":
         logger.info("Запуск функции для стейдж сервера")
         asyncio.create_task(send_stage_order_update(int(order_id), status))
-    if base_url == "https://new.aurora-api.uz/api-node":
+    if base_url == "prod":
         logger.info("Запуск функции для прод сервера")
         asyncio.create_task(send_order_update(int(order_id), status))    
 
