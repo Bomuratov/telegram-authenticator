@@ -51,8 +51,8 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         logger.error("Ошибка Telegram: %s", e)
         return
     try:
-        _, order_id, base_url = callback_query.data.split(":", 2)
-        logger.info(f"Извлекаем: base_url='{base_url}'")
+        _, order_id, source = callback_query.data.split(":", 2)
+        logger.info(f"Извлекаем: base_url='{source}'")
     except ValueError as e:
         logger.error(f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}")
     
@@ -86,10 +86,10 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     
 
     logger.info("Передаем функцию send_order_update вфоновой задачи")
-    if base_url == "stage":
+    if source == "stage":
         logger.info("Запуск функции для стейдж сервера")
         asyncio.create_task(send_stage_order_update(int(order_id), status))
-    if base_url == "prod":
+    else:
         logger.info("Запуск функции для прод сервера")
         asyncio.create_task(send_order_update(int(order_id), status))    
 
@@ -141,7 +141,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     if source == "stage":
         logger.info("Запуск функции для стейдж сервера")
         asyncio.create_task(send_stage_order_update(int(order_id), status)) 
-    if source == "prod":
+    else:
         logger.info("Запуск функции для прод сервера")
         asyncio.create_task(send_order_update(int(order_id), status)) 
 
