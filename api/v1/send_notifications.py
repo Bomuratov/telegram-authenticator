@@ -56,13 +56,18 @@ router = APIRouter()
 
 @router.post("/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
-    print(request.base_url)
+    print(request.headers.get("X-Forwarded-Host"))
+    client_url = request.headers.get("X-Forwarded-Host")
+
+    print(request.client.host)
+    print(request.client.port)
+    print(request.client)
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload.id}:{request.base_url}"),
-                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{payload.id}:{request.base_url}")
+                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload.id}:{client_url}"),
+                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{payload.id}:{client_url}")
             ]
         ]
     )
