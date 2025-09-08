@@ -1,10 +1,11 @@
 import logging
 import requests
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
 from schemas.notifications import PayloadModel, AcceptOrderModel
 from bot.commands import bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 
 from utils.create_text import create_order, accept_text
 
@@ -54,14 +55,14 @@ router = APIRouter()
 
 
 @router.post("/new-order")
-async def new_order_notification(payload: PayloadModel):
-    # logger.info("Получен запрос на новый заказ с payload: %s", payload)
+async def new_order_notification(payload: PayloadModel, request: Request):
+    print(request.base_url)
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload.id}"),
-                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{payload.id}")
+                InlineKeyboardButton(text="✅ Принять", callback_data=f"accept_order:{payload.id}:{request.base_url}"),
+                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{payload.id}:{request.base_url}")
             ]
         ]
     )
@@ -69,7 +70,7 @@ async def new_order_notification(payload: PayloadModel):
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, text=create_order(payload), parse_mode="html", reply_markup=keyboard)
         logger.info(f"##################################")
-        # logger.info("Сообщение отправлено успешно на chat_id: %s", payload.orders_chat_id)
+        logger.info("Сообщение отправлено успешно на chat_id: %s", payload.orders_chat_id)
         logger.info(f"##################################")
 
         return {
@@ -96,7 +97,7 @@ async def new_order_notification(payload: PayloadModel):
 @router.post("/accept-order")
 async def accept_order(payload: AcceptOrderModel):
     logger.info(f"##################################")
-    # logger.info("Получен запрос на принятие заказа с payload: %s", payload)
+    logger.info("Получен запрос на принятие заказа с payload: %s", payload)
     logger.info(f"##################################")
     try:
         await bot.send_message(chat_id=payload.orders_chat_id, 
