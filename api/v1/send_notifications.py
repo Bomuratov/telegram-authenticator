@@ -56,8 +56,8 @@ router = APIRouter()
 
 @router.post("/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
-    print(request.headers.get("X-Forwarded-Host"))
     client_url = request.headers.get("X-Forwarded-Host")
+    print(client_url)
 
 
     keyboard = InlineKeyboardMarkup(
