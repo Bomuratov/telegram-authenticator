@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
-
+@router.post("/support")
 async def support_case(data: SupportModel):
     caption = (
         f"📩 <b>Новое Обращение</b>\n"
