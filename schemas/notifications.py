@@ -55,6 +55,15 @@ class AcceptOrderModel(BaseModel):
     orders_chat_id: str
     courier: CourierModel
 
+
+class SupportModel(BaseModel):
+    name: str
+    email: Optional[str]
+    phone: str
+    subject: str
+    message: str
+    attachment: Optional[str]
+    
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [
