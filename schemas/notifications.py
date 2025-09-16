@@ -58,11 +58,11 @@ class AcceptOrderModel(BaseModel):
 
 class SupportModel(BaseModel):
     name: str
-    email: Optional[str]
+    email: Optional[str] = None
     phone: str
     subject: str
     message: str
-    attachment: Optional[str]
+    attachment: Optional[str] = None
 
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
