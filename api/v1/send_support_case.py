@@ -4,6 +4,8 @@ from fastapi import APIRouter, status, HTTPException
 from aiogram.exceptions import TelegramBadRequest
 from schemas.notifications import SupportModel
 from bot.commands import bot
+from aiogram.types import InputFile
+import io
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -31,10 +33,10 @@ async def support_case(data: SupportModel):
                 photo_bytes = base64.b64decode(b64_str)
             except Exception:
                 raise HTTPException(status_code=400, detail="Неверный формат base64")
-
+            photo_file = InputFile(io.BytesIO(photo_bytes), filename="image.png")
             await bot.send_photo(
                 chat_id="-1002641409178",
-                photo=photo_bytes,
+                photo=photo_file,
                 caption=caption,
                 parse_mode="HTML"
             )
