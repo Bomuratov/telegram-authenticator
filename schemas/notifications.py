@@ -63,7 +63,7 @@ class SupportModel(BaseModel):
     subject: str
     message: str
     attachment: Optional[str]
-    
+
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [
@@ -131,3 +131,4 @@ class SupportModel(BaseModel):
 #     "created_at": "2025-08-19T04:32:56.226Z",
 #     "updated_at": "2025-08-19T04:32:56.226Z"
 # }
+

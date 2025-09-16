@@ -23,8 +23,12 @@ async def support_case(data: SupportModel):
 
     try:
         if data.attachment:
+            b64_str = data.attachment
+            if b64_str.startswith("data:"):
+                b64_str = b64_str.split(",", 1)[1]
+
             try:
-                photo_bytes = base64.b64decode(data.attachment)
+                photo_bytes = base64.b64decode(b64_str)
             except Exception:
                 raise HTTPException(status_code=400, detail="Неверный формат base64")
 
