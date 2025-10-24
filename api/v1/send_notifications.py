@@ -2,7 +2,7 @@ import logging
 import requests
 from fastapi import APIRouter, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
-from schemas.notifications import PayloadModel, AcceptOrderModel
+from schemas.notifications import PayloadModel, AcceptOrderModel, Code
 from bot.commands import bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -49,7 +49,6 @@ router = APIRouter()
     "created_at": "2025-04-19T18:57:20.195Z",
     "updated_at": "2025-04-19T18:57:20.195Z"
 }
-
 
 
 
@@ -103,7 +102,24 @@ async def accept_order(payload: AcceptOrderModel):
     
     except requests.RequestException as e:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
+    
 
+@router.post("/any")
+async def send_code(payload: Code):
+
+    try:
+        await bot.send_message(chat_id=-974972939, 
+                               text=payload.text,
+                               parse_mode='HTML')
+        return {
+            "message": "Уведомление успешно отправлено",
+            "code" : 2
+        }
+    except TelegramBadRequest as e:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except requests.RequestException as e:
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
 
 

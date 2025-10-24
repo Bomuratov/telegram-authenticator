@@ -64,6 +64,9 @@ class SupportModel(BaseModel):
     message: str
     attachment: Optional[str] = None
 
+class Code(BaseModel):
+    text: str
+
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [
