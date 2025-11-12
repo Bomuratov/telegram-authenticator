@@ -2,7 +2,7 @@ import logging
 import requests
 from fastapi import APIRouter, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
-from schemas.notifications import PayloadModel, AcceptOrderModel, Code
+from schemas.notifications import PayloadModel, AcceptOrderModel, Code, GrokSchema
 from bot.commands import bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -123,18 +123,18 @@ async def send_code(payload: Code):
 
 
 @router.post("/grok")
-async def send_case(name: str, phone:str, message:str, group_id: str):
+async def send_case(payload: GrokSchema):
     caption = (
         f"📩 <b>Новое Обращение</b>\n"
-        f"👤 Имя: {name}\n"
-        f"📱 Телефон: {phone}\n"
+        f"👤 Имя: {payload.name}\n"
+        f"📱 Телефон: {payload.phone}\n"
         f"<b>————————————————</b>\n"
-        f"💬 Сообщение: {message}"
+        f"💬 Сообщение: {payload.message}"
     )
 
 
     try:
-        await bot.send_message(chat_id=str(group_id), 
+        await bot.send_message(chat_id=str(payload.chat_id), 
                                text=caption,
                                parse_mode='HTML')
         return {

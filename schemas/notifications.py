@@ -67,6 +67,14 @@ class SupportModel(BaseModel):
 class Code(BaseModel):
     text: str
 
+
+
+class GrokSchema(BaseModel):
+    name: str
+    phone: str
+    message: str
+    chat_id: str
+
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [
