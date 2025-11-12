@@ -122,5 +122,30 @@ async def send_code(payload: Code):
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
 
 
+@router.post("/grok")
+async def send_case(name: str, phone:str, message:str):
+    caption = (
+        f"📩 <b>Новое Обращение</b>\n"
+        f"👤 Имя: {name}\n"
+        f"📱 Телефон: {phone}\n"
+        f"———————————————————————————"
+        f"💬 Сообщение: {message}"
+    )
+
+
+    try:
+        await bot.send_message(chat_id=-1002641409178, 
+                               text=caption,
+                               parse_mode='HTML')
+        return {
+            "message": "Уведомление успешно отправлено",
+            "code" : 2
+        }
+    except TelegramBadRequest as e:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except requests.RequestException as e:
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")    
+
 
 
