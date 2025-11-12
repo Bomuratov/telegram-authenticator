@@ -123,18 +123,18 @@ async def send_code(payload: Code):
 
 
 @router.post("/grok")
-async def send_case(name: str, phone:str, message:str):
+async def send_case(name: str, phone:str, message:str, group_id: str):
     caption = (
         f"📩 <b>Новое Обращение</b>\n"
         f"👤 Имя: {name}\n"
         f"📱 Телефон: {phone}\n"
-        f"———————————————————————————"
+        f"<b>————————————————</b>\n"
         f"💬 Сообщение: {message}"
     )
 
 
     try:
-        await bot.send_message(chat_id=-1002641409178, 
+        await bot.send_message(chat_id=str(group_id), 
                                text=caption,
                                parse_mode='HTML')
         return {
