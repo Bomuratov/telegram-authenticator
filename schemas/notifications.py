@@ -66,6 +66,7 @@ class SupportModel(BaseModel):
 
 class Code(BaseModel):
     text: str
+    phone: str
 
 
 

@@ -53,6 +53,41 @@ router = APIRouter()
 
 
 
+@router.post("/native/new-order")
+async def new_order_notification(payload: PayloadModel, request: Request):
+    source = request.headers.get("X-Source")
+
+
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text="✅ Принять", callback_data=f"choose_time:{payload.id}:{source}"),
+                InlineKeyboardButton(text="❌ Отклонить", callback_data=f"reject_order:{payload.id}:{source}")
+            ]
+        ]
+    )
+
+    try:
+        await bot.send_message(chat_id=payload.orders_chat_id, text=create_order(payload), parse_mode="html", reply_markup=keyboard)
+
+        return {
+            "message": "Notify has successfully sended",
+            "code": 2
+        }
+    except TelegramBadRequest as e:
+        
+        logger.error("Ошибка Telegram: %s", e)
+
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except requests.RequestException as e:
+        
+        logger.error("Ошибка запроса к REST API ресторана: %s", e)
+
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")
+    
+
+
 @router.post("/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
     source = request.headers.get("X-Source")
@@ -109,7 +144,7 @@ async def send_code(payload: Code):
 
     try:
         await bot.send_message(chat_id=-974972939, 
-                               text=payload.text,
+                               text=f"phone: {payload.phone}\ncode: {payload.text}",
                                parse_mode='HTML')
         return {
             "message": "Уведомление успешно отправлено",
