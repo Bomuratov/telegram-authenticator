@@ -18,13 +18,13 @@ logger = logging.getLogger(__name__)
 bot_router = Router()
 
 
-async def send_order_update(order_id: int, status: str, body: dict):
+async def send_order_update(order_id: int, status: str):
     """Фоновая задача для отправки PUT-запроса на backend"""
     url = f"https://new.aurora-api.uz/api-node/api/orders/update/{order_id}/"
     headers = {"Content-Type": "application/json"}
     data = {
-        "status": status,
-        "preparation_time": body
+        "status": status
+        # "preparation_time": body
         }
 
     logger.info("Запуск функции для прод сервера")
@@ -38,13 +38,13 @@ async def send_order_update(order_id: int, status: str, body: dict):
         logger.error(f"❌ Ошибка при обновлении заказа #{order_id}: {e}")
 
 
-async def send_stage_order_update(order_id: int, status: str, body: dict):
+async def send_stage_order_update(order_id: int, status: str):
     """Фоновая задача для отправки PUT-запроса на backend"""
     url = f"https://stage.aurora-api.uz/api-node/api/orders/update/{order_id}/"
     headers = {"Content-Type": "application/json"}
     data = {
-        "status": status,
-        "preparation_time": body
+        "status": status
+        # "preparation_time": body
         }
 
 
