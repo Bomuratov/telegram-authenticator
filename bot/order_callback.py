@@ -1,12 +1,12 @@
 import asyncio
 import requests
 import logging
-import time
 from aiogram import Router, types, F
 from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from utils.send_update import send_order_update, send_stage_order_update
 
 uz_time = datetime.now(ZoneInfo("Asia/Tashkent"))
 
@@ -15,47 +15,11 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+
+
 bot_router = Router()
 
 
-async def send_order_update(order_id: int, status: str):
-    """Фоновая задача для отправки PUT-запроса на backend"""
-    url = f"https://new.aurora-api.uz/api-node/api/orders/update/{order_id}/"
-    headers = {"Content-Type": "application/json"}
-    data = {
-        "status": status
-        # "preparation_time": body
-        }
-
-    logger.info("Запуск функции для прод сервера")
-
-    try:
-        response = await asyncio.to_thread(
-            requests.put, url, json=data, headers=headers
-        )
-        return response
-    except Exception as e:
-        logger.error(f"❌ Ошибка при обновлении заказа #{order_id}: {e}")
-
-
-async def send_stage_order_update(order_id: int, status: str):
-    """Фоновая задача для отправки PUT-запроса на backend"""
-    url = f"https://stage.aurora-api.uz/api-node/api/orders/update/{order_id}/"
-    headers = {"Content-Type": "application/json"}
-    data = {
-        "status": status
-        # "preparation_time": body
-        }
-
-
-    logger.info("Запуск функции для прод сервера")
-    logger.info(url)
-    try:
-        response = await asyncio.to_thread(
-            requests.put, url, json=data, headers=headers
-        )
-    except Exception as e:
-        logger.error(f"❌ Ошибка при обновлении заказа #{order_id}: {e}")
 
 
 @bot_router.callback_query(F.data.startswith("reject_order"))
@@ -103,6 +67,11 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         asyncio.create_task(send_order_update(int(order_id), status))
 
 
+
+
+
+
+
 @bot_router.callback_query(F.data.startswith("accept_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
     # try:
@@ -125,7 +94,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         f"{callback_query.from_user.last_name or ''}"
     )
 
-    status = "awaiting_courier"
+    status = "issued"
 
     try:
         await callback_query.message.delete_reply_markup()
@@ -146,6 +115,10 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     else:
         logger.info("Запуск функции для прод сервера")
         asyncio.create_task(send_order_update(int(order_id), status))
+
+
+
+
 
 
 @bot_router.callback_query(F.data.startswith("choose_time"))

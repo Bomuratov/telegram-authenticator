@@ -53,7 +53,7 @@ router = APIRouter()
 
 
 
-@router.post("/native/new-order")
+@router.post("/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
     source = request.headers.get("X-Source")
 
@@ -88,7 +88,7 @@ async def new_order_notification(payload: PayloadModel, request: Request):
     
 
 
-@router.post("/new-order")
+@router.post("/web/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
     source = request.headers.get("X-Source")
 

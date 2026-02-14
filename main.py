@@ -9,14 +9,10 @@ from api.v1.send_notifications import router as send_notify
 from api.v1.send_support_case import router as send_support_case
 
 
-
-
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 origins = ["*"]
-
 
 
 @asynccontextmanager
@@ -34,7 +30,6 @@ fapp.include_router(router, tags=["webhook"])
 fapp.include_router(send_code, tags=["send_code"])
 fapp.include_router(send_notify, tags=["send_notify"])
 fapp.include_router(send_support_case, tags=["send_support_case"])
-
 
 
 fapp.add_middleware(
