@@ -86,13 +86,16 @@ class ReviewType(str, Enum):
 
 
 class ReviewSchema(BaseModel):
-    order_id: int
-    user_id: int
+    created_by: Optional[int]
+    order_id: Optional[int]
+    user_id: Optional[int]
     type: ReviewType
-    rating: int
+    rating: Optional[int]
 
     tags: Optional[List[str]] = None
     comment: Optional[str] = None
+    created_at: Optional[datetime]
+    updated_at: Optional[datetime]
 
     {
     "order_id": int,
