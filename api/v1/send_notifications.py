@@ -1,10 +1,11 @@
 import logging
+import tempfile
 import requests
-from fastapi import APIRouter, status, HTTPException, Request
+from fastapi import APIRouter, File, Form, UploadFile, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
-from schemas.notifications import PayloadModel, AcceptOrderModel, Code, GrokSchema
+from schemas.notifications import PayloadModel, AcceptOrderModel, Code, GrokSchema, OFDSchema
 from bot.commands import bot
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
 
 from utils.create_text import create_order, accept_text
@@ -181,6 +182,40 @@ async def send_case(payload: GrokSchema):
     
     except requests.RequestException as e:
         return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")    
+    
 
+@router.post("/reject/ofd")
+async def reject_ofd(
+    error: str = Form(...),
+    chat_id: int = Form(-5157406566),
+    file: UploadFile = File(...)
+):
+   
 
+    try:
+        # сохраняем файл во временное место
+        with tempfile.NamedTemporaryFile(delete=False, suffix=".p7b") as tmp:
+            tmp.write(await file.read())
+            tmp_path = tmp.name
 
+        # отправляем через FSInputFile
+        telegram_file = FSInputFile(tmp_path, filename=file.filename)
+        filename = file.filename  # receipt-1123.p7b
+        order_id = int(filename.split("-")[1].split(".")[0])
+        caption = (
+            f"🔥 Ошибка ОФД\n"
+            f"📦 Order ID: <b>{order_id}</b>\n"
+            f"❌ {error}"
+    )
+
+        await bot.send_document(
+            chat_id=chat_id,
+            document=telegram_file,
+            caption=caption,
+            parse_mode="HTML"
+        )
+
+        return {"message": "Файл отправлен"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

@@ -76,6 +76,11 @@ class GrokSchema(BaseModel):
     message: str
     chat_id: str
 
+class OFDSchema(BaseModel):
+    error: str
+    receipt: Optional[str]
+    chat_id: Optional[int] = -5157406566
+
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [
