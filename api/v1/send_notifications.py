@@ -212,7 +212,7 @@ async def reject_ofd(
             chat_id=chat_id,
             document=telegram_file,
             caption=caption,
-            parse_mode="HTML"
+            parse_mode=None
         )
 
         return {"message": "Файл отправлен"}
