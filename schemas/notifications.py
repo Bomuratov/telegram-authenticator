@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from enum import Enum
+
 
 
 class NotifyModel(BaseModel):
@@ -76,19 +78,21 @@ class GrokSchema(BaseModel):
     message: str
     chat_id: str
 
+
+
+class ReviewType(str, Enum):
+    VENDOR = "vendor"
+    COURIER = "courier"
+
+
 class ReviewSchema(BaseModel):
-    order_id: Optional[int]
+    order_id: int
+    user_id: int
+    type: ReviewType
+    rating: int
 
-    vendor_id: Optional[int]
-    restaurant_rating: Optional[int]
-    restaurant_tags: Optional[List[str]]
-    vendor_comment: Optional[str]
-
-    courier_id: Optional[int]
-    courier_rating: Optional[int]
-    courier_tags: Optional[List[str]]
-    courier_comment: Optional[str]
-
+    tags: Optional[List[str]] = None
+    comment: Optional[str] = None
 
     {
     "order_id": int,
