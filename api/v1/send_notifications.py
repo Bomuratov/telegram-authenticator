@@ -3,7 +3,7 @@ import tempfile
 import requests
 from fastapi import APIRouter, File, Form, UploadFile, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
-from schemas.notifications import PayloadModel, AcceptOrderModel, Code, GrokSchema, OFDSchema
+from schemas.notifications import PayloadModel, AcceptOrderModel, Code, GrokSchema, OFDSchema, ReviewSchema
 from bot.commands import bot
 from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -220,3 +220,38 @@ async def reject_ofd(
     except Exception as e:
         print(e)
         raise HTTPException(status_code=500, detail=str(e))
+
+
+
+@router.post("/send/review")
+async def send_review(payload: ReviewSchema):
+    caption = (
+        f"📩 <b>Новый Отзыв</b>\n\n"
+        f"📦 Заказ: #{payload.order_id or 0}А\n\n"
+        f"🏯 Вендор: {payload.vendor_id or 0}\n"
+        f"⭐️ Оценка: {payload.restaurant_rating or 0}\n"
+        f"📌 Тэг: {payload.courier_tags or ''}\n"
+        f"<b>————————————————</b>\n"
+        f"💬 Отзыв: {payload.vendor_comment or ''}\n\n"
+        f"<b>————————————————</b>\n"
+        f"🚗 Курьер: {payload.courier_id or 0}\n"
+        f"⭐️ Оценка: {payload.courier_rating or 0}\n"
+        f"📌 Тэг: {payload.courier_tags or ''}\n"
+        f"<b>————————————————</b>\n"
+        f"💬 Отзыв: {payload.courier_comment or ''}"
+    )
+
+
+    try:
+        await bot.send_message(chat_id=str(-1003641022931), 
+                               text=caption,
+                               parse_mode='HTML')
+        return {
+            "message": "Уведомление успешно отправлено",
+            "code" : 2
+        }
+    except TelegramBadRequest as e:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+    
+    except requests.RequestException as e:
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Ошибка при получении orders_chat_id")   

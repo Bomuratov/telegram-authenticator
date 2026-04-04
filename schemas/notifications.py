@@ -76,6 +76,34 @@ class GrokSchema(BaseModel):
     message: str
     chat_id: str
 
+class ReviewSchema(BaseModel):
+    order_id: Optional[int]
+
+    vendor_id: Optional[int]
+    restaurant_rating: Optional[int]
+    restaurant_tags: Optional[List[str]]
+    vendor_comment: Optional[str]
+
+    courier_id: Optional[int]
+    courier_rating: Optional[int]
+    courier_tags: Optional[List[str]]
+    courier_comment: Optional[str]
+
+
+    {
+    "order_id": int,
+    
+    "vendor_id": int,
+    "restaurant_rating": "",
+    "restaurant_tags": "",
+    "vendor_comment": "",
+    
+    "courier_id": int,
+    "courier_rating": "",
+    "courier_tags": "",
+    "courier_comment": "",
+}
+
 class OFDSchema(BaseModel):
     error: str
     receipt: Optional[str]
