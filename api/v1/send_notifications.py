@@ -204,7 +204,7 @@ async def reject_ofd(
         order_id = int(filename.split("-")[1].split(".")[0])
         caption = (
             f"🔥 Ошибка ОФД\n"
-            f"📦 Order ID: <b>{order_id}</b>\n"
+            f"📦 Order ID: {order_id}\n"
             f"❌ {error}"
     )
 
