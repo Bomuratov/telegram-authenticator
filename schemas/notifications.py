@@ -87,8 +87,8 @@ class ReviewType(str, Enum):
 
 class ReviewSchema(BaseModel):
     created_by: Optional[int]
-    order_id: Optional[int]
-    user_id: Optional[int]
+    orderId: Optional[int]
+    userId: Optional[int]
     type: ReviewType
     rating: Optional[int]
 
@@ -97,19 +97,7 @@ class ReviewSchema(BaseModel):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
-    {
-    "order_id": int,
     
-    "vendor_id": int,
-    "restaurant_rating": "",
-    "restaurant_tags": "",
-    "vendor_comment": "",
-    
-    "courier_id": int,
-    "courier_rating": "",
-    "courier_tags": "",
-    "courier_comment": "",
-}
 
 class OFDSchema(BaseModel):
     error: str
