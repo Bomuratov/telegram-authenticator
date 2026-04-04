@@ -228,7 +228,7 @@ async def send_review(payload: ReviewSchema):
     if payload.type == "vendor":
         caption = (
             f"📩 <b>Новый Отзыв</b>\n\n"
-            f"📦 Заказ: #{payload.order_id or 0}А\n\n"
+            f"📦 Заказ: #{payload.orderId or 0}А\n\n"
             f"🏯 Вендор: {payload.type or 0}\n"
             f"⭐️ Оценка: {payload.rating or 0}\n"
             f"📌 Тэг: {payload.tags or []}\n"
@@ -239,7 +239,7 @@ async def send_review(payload: ReviewSchema):
     if payload.type == "courier":
         caption = (
             f"📩 <b>Новый Отзыв</b>\n\n"
-            f"📦 Заказ: #{payload.order_id or 0}А\n\n"
+            f"📦 Заказ: #{payload.orderId or 0}А\n\n"
             f"🚗 Курьер: {payload.type or ''}\n"
             f"⭐️ Оценка: {payload.rating or 0}\n"
             f"📌 Тэг: {payload.tags or []}\n"
