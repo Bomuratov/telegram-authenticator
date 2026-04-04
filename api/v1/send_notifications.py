@@ -249,7 +249,7 @@ async def send_review(payload: ReviewSchema):
 
 
     try:
-        await bot.send_message(chat_id=str(-1003641022931), 
+        await bot.send_message(chat_id=str(-5128014604), 
                                text=caption,
                                parse_mode='HTML')
         return {
