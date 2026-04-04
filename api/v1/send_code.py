@@ -85,3 +85,4 @@ async def handle_github_webhook(request: Request):
     )
     await bot.send_message(chat_id=-5252953412, text=message, parse_mode="HTML")
     return {"status": "ok"}
+
