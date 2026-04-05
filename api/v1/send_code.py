@@ -1,6 +1,5 @@
 import random
 from fastapi import APIRouter, status, Depends, Request, HTTPException
-# from config import db_redis
 from bot.commands import bot
 from aiogram.exceptions import TelegramBadRequest
 from utils.encode import encoder

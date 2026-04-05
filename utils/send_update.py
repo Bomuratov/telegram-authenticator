@@ -42,5 +42,6 @@ async def send_stage_order_update(order_id: int, status: str):
         response = await asyncio.to_thread(
             requests.put, url, json=data, headers=headers
         )
+        return response
     except Exception as e:
         logger.error(f"❌ Ошибка при обновлении заказа #{order_id}: {e}")
