@@ -28,15 +28,16 @@ def build_review_keyboard(payload: ReviewSchema) -> InlineKeyboardMarkup:
         )
 
     # 🚨 Действия (callback)
-    # buttons.append([
-    #     InlineKeyboardButton(
-    #         text="🚨 В работу",
-    #         callback_data=f"review:take:{payload.orderId}"
-    #     ),
-    #     InlineKeyboardButton(
-    #         text="✅ Закрыть",
-    #         callback_data=f"review:close:{payload.orderId}"
-    #     )
-    # ])
+    buttons.append(
+        [
+            InlineKeyboardButton(
+                text="🚨 Взять в работу", callback_data=f"review:take:{payload.orderId}"
+            ),
+            # InlineKeyboardButton(
+            #     text="✅ Закрыть",
+            #     callback_data=f"review:close:{payload.orderId}"
+            # )
+        ]
+    )
 
     return InlineKeyboardMarkup(inline_keyboard=buttons)

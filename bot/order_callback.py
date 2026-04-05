@@ -15,11 +15,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-
-
 bot_router = Router()
-
-
 
 
 @bot_router.callback_query(F.data.startswith("reject_order"))
@@ -67,11 +63,6 @@ async def action_accept_order(callback_query: types.CallbackQuery):
         asyncio.create_task(send_order_update(int(order_id), status))
 
 
-
-
-
-
-
 @bot_router.callback_query(F.data.startswith("accept_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
     # try:
@@ -115,10 +106,6 @@ async def action_accept_order(callback_query: types.CallbackQuery):
     else:
         logger.info("Запуск функции для прод сервера")
         asyncio.create_task(send_order_update(int(order_id), status))
-
-
-
-
 
 
 @bot_router.callback_query(F.data.startswith("choose_time"))
@@ -215,13 +202,10 @@ async def set_time(callback_query: types.CallbackQuery):
     except TelegramBadRequest as e:
         logger.error(e)
         return
-    
+
     url = f"https://stage.aurora-api.uz/api-node/api/orders/update/{order_id}/"
     headers = {"Content-Type": "application/json"}
-    data = {
-        "status": status,
-        "preparation_time": body
-        }
+    data = {"status": status, "preparation_time": body}
 
     resp = requests.put(url, json=data, headers=headers)
     return resp

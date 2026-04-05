@@ -2,12 +2,13 @@ from aiogram import types, Bot, Dispatcher
 from aiogram.filters import Command
 from config import settings
 from .order_callback import bot_router
+from .handlers.reviews import review_router
 
 
 bot = Bot(token=f"{settings.bot.token}")
 dp = Dispatcher()
 dp.include_router(bot_router)
-
+dp.include_router(review_router)
 
 
 @dp.message(Command("myid"))
@@ -15,6 +16,7 @@ async def send_message(message: types.Message):
     return await bot.send_message(
         chat_id=message.chat.id, text=f"Твой айди {message.chat.id}"
     )
+
 
 @dp.message(Command("check"))
 async def send_message(message: types.Message):
