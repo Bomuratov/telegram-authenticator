@@ -13,12 +13,6 @@ now = datetime.now(tashkent_tz).strftime("%d.%m %H:%M")
 
 @review_router.callback_query(F.data.startswith("review:"))
 async def handle_review_action(callback: CallbackQuery):
-    print("=== CALLBACK ===")
-    print("data:", callback.data)
-    print("user_id:", callback.from_user.id)
-    print("username:", callback.from_user.username)
-    print("chat_id:", callback.message.chat.id if callback.message else None)
-    print("================")
     _, action, orderId = callback.data.split(":")
 
     if action == "take":
