@@ -4,10 +4,10 @@ from datetime import datetime
 from enum import Enum
 
 
-
 class NotifyModel(BaseModel):
     restaurant_id: int
     body: Dict[str, Any]
+
 
 # class Location(BaseModel):
 #     id: int
@@ -44,7 +44,6 @@ class PayloadModel(BaseModel):
     location: dict
 
 
-
 class CourierModel(BaseModel):
     id: int
     username: str
@@ -66,10 +65,10 @@ class SupportModel(BaseModel):
     message: str
     attachment: Optional[str] = None
 
+
 class Code(BaseModel):
     text: str
     phone: str
-
 
 
 class GrokSchema(BaseModel):
@@ -77,7 +76,6 @@ class GrokSchema(BaseModel):
     phone: str
     message: str
     chat_id: str
-
 
 
 class ReviewType(str, Enum):
@@ -97,12 +95,12 @@ class ReviewSchema(BaseModel):
     created_at: Optional[datetime]
     updated_at: Optional[datetime]
 
-    
 
 class OFDSchema(BaseModel):
     error: str
     receipt: Optional[str]
     chat_id: Optional[int] = -5157406566
+
 
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
@@ -171,4 +169,3 @@ class OFDSchema(BaseModel):
 #     "created_at": "2025-08-19T04:32:56.226Z",
 #     "updated_at": "2025-08-19T04:32:56.226Z"
 # }
-

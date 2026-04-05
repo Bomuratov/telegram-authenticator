@@ -11,3 +11,4 @@ alembic/
 /alembic/
 /alembic
 alembic.ini
+__pycache__
