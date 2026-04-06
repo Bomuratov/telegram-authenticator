@@ -203,14 +203,14 @@ async def set_time(callback_query: types.CallbackQuery):
         logger.error(e)
         return
 
-    url = f"https://stage.aurora-api.uz/api-node/api/orders/update/{order_id}/"
+    if source == "stage":
+        url = f"https://stage.aurora-api.uz/api-node/api/orders/update/{order_id}/"
+
+    else:
+        url = f"https://new.aurora-api.uz/api-node/api/orders/update/{order_id}/"
+    
     headers = {"Content-Type": "application/json"}
     data = {"status": status, "preparation_time": body}
-
     resp = requests.put(url, json=data, headers=headers)
     return resp
     # отправляем обновление на сервер
-    # if source == "stage":
-    #     asyncio.create_task(send_stage_order_update(int(order_id), status, body))
-    # else:
-    #     asyncio.create_task(send_order_update(int(order_id), status, body))
