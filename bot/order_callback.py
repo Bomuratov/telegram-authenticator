@@ -187,7 +187,7 @@ async def set_time(callback_query: types.CallbackQuery):
     body = {
         "fullTime": time.strftime("%Y.%m.%d %H:%M"),
         "time": time.strftime("%H:%M"),
-        "preparationMinutes": f"{minutes} мин",
+        "preparationMinutes": int(minutes),
         "acceptedBy": f"{callback_query.from_user.first_name} {callback_query.from_user.last_name}",
         "operatorLogin": f"@{callback_query.from_user.username}",
     }
