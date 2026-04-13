@@ -8,11 +8,12 @@ import pytz
 review_router = Router()
 
 tashkent_tz = pytz.timezone("Asia/Tashkent")
-now = datetime.now(tashkent_tz).strftime("%d.%m %H:%M")
+
 
 
 @review_router.callback_query(F.data.startswith("review:"))
 async def handle_review_action(callback: CallbackQuery):
+    now = datetime.now(tashkent_tz).strftime("%d.%m %H:%M")
     print("=== CALLBACK ===")
     print("data:", callback.data)
     print("user_id:", callback.from_user.id)
