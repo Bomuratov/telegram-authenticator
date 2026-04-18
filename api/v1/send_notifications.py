@@ -3,6 +3,7 @@ import tempfile
 import requests
 from fastapi import APIRouter, File, Form, UploadFile, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
+from schemas.fianance_failed_schema import FinanceFailPayload
 from schemas.notifications import (
     PayloadModel,
     AcceptOrderModel,
@@ -13,6 +14,7 @@ from schemas.notifications import (
 )
 from bot.commands import bot
 from aiogram.types import FSInputFile, InlineKeyboardMarkup, InlineKeyboardButton
+from utils.finance_failed import create_failed_text
 from utils.review.build_captions import build_caption
 from utils.review.build_review_keyboard import build_review_keyboard
 
@@ -264,3 +266,31 @@ async def send_review(payload: ReviewSchema):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ошибка при получении orders_chat_id",
         )
+
+
+@router.post("/finance-fail")
+async def finance_fail(payload:FinanceFailPayload):
+
+
+    text = create_failed_text(payload=payload)
+    # text = "salam"
+
+    try:
+        await bot.send_message(
+            chat_id=str(-5157406566),
+            text=text[:4000],
+            parse_mode="HTML",
+        )
+        return {"message": "Уведомление успешно отправлено", "code": 2}
+    
+    except TelegramBadRequest as e:
+        return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    except requests.RequestException as e:
+        return HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Ошибка при получении orders_chat_id",
+        )
+
+
+

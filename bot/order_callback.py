@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from utils.send_update import send_order_update, send_stage_order_update
 
-uz_time = datetime.now(ZoneInfo("Asia/Tashkent"))
 
 
 logging.basicConfig(level=logging.INFO)
@@ -171,6 +170,8 @@ async def choose_time(callback_query: types.CallbackQuery):
 
 @bot_router.callback_query(F.data.startswith("set_time"))
 async def set_time(callback_query: types.CallbackQuery):
+    uz_time = datetime.now(ZoneInfo("Asia/Tashkent"))
+
     # await callback_query.answer()
 
     _, order_id, source, minutes = callback_query.data.split(":", 3)
