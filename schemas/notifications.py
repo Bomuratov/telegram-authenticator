@@ -106,6 +106,10 @@ class CancelOrderDTO(BaseModel):
     order_id: int
 
 
+class PaidOrderDTO(BaseModel):
+    order_id: int
+
+
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [

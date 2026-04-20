@@ -15,22 +15,27 @@ async def handle_order_canceled(order_id: int):
     original_text = data["text"]
 
     new_text = original_text + "\n\n❌ Заказ отменен Пользователем."
+    text = f"❌ Заказ {order_id}A отменен Пользователем.\n\n"
 
     try:
-        # убираем кнопки
-        await bot.edit_message_reply_markup(
-            chat_id=chat_id,
-            message_id=message_id,
-            reply_markup=None
-        )
+        try:
+            await bot.edit_message_reply_markup(
+                chat_id=chat_id,
+                message_id=message_id,
+                reply_markup=None
+            )
+            # обновляем текст
+            
+        except TelegramBadRequest as e:
+            # если кнопок уже нет — просто логируем и продолжаем
+            print(f"Reply markup already removed: {e}")
 
-        # обновляем текст
-        await bot.edit_message_text(
+        await bot.send_message(
             chat_id=chat_id,
-            message_id=message_id,
-            text=new_text,
-            parse_mode="HTML"
+            text=text,
+            reply_to_message_id=message_id 
         )
+        
 
     except TelegramBadRequest as e:
         print(f"Telegram error: {e}")

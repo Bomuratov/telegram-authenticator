@@ -18,6 +18,7 @@ bot_router = Router()
 
 @bot_router.callback_query(F.data.startswith("reject_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
+    await delete_order_message(order_id)
     try:
         _, order_id, source = callback_query.data.split(":", 2)
         logger.info(f"Извлекаем: base_url='{source}'")
@@ -99,7 +100,6 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 async def choose_time(callback_query: types.CallbackQuery):
 
     _, order_id, source = callback_query.data.split(":", 2)
-    await delete_order_message(order_id)
 
 
     keyboard = InlineKeyboardMarkup(

@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from schemas.notifications import PayloadModel, AcceptOrderModel
+from schemas.notifications import PaidOrderDTO, PayloadModel, AcceptOrderModel
 from zoneinfo import ZoneInfo
 
 
@@ -80,5 +80,12 @@ def accept_text(payload: AcceptOrderModel):
 
     return header + body + contact + text + footer
 
+
+def order_paid(payload: PaidOrderDTO):
+    order_id = payload.order_id
+    header = f"<b>✅ Заказ</b> #{order_id}A опалчен.\n"
+    footer = f"<b>Можно готовить</b>"
+    linear = "<b>————————————————</b>\n"
+    return header + linear + footer
 
 
