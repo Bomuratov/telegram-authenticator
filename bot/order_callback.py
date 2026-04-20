@@ -6,9 +6,8 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
+from config.redis_client import delete_order_message
 from utils.send_update import send_order_update, send_stage_order_update
-
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -19,12 +18,6 @@ bot_router = Router()
 
 @bot_router.callback_query(F.data.startswith("reject_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
-    # try:
-    #     await callback_query.answer("Запрос обработан...")
-
-    # except TelegramBadRequest as e:
-    #     logger.error("Ошибка Telegram: %s", e)
-    #     return
     try:
         _, order_id, source = callback_query.data.split(":", 2)
         logger.info(f"Извлекаем: base_url='{source}'")
@@ -64,12 +57,6 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 
 @bot_router.callback_query(F.data.startswith("accept_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
-    # try:
-    #     await callback_query.answer("Запрос обработан...")
-
-    # except TelegramBadRequest as e:
-    #     logger.error("Ошибка Telegram: %s", e)
-    #     return
     try:
         _, order_id, source = callback_query.data.split(":", 2)
         logger.info(f"Извлекаем: base_url='{source}'")
@@ -93,6 +80,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
             parse_mode="HTML",
             disable_web_page_preview=True,
         )
+        
 
     except TelegramBadRequest as e:
         logger.error("Ошибка Telegram: %s", e)
@@ -109,9 +97,10 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 
 @bot_router.callback_query(F.data.startswith("choose_time"))
 async def choose_time(callback_query: types.CallbackQuery):
-    # await callback_query.answer()
 
     _, order_id, source = callback_query.data.split(":", 2)
+    await delete_order_message(order_id)
+
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
@@ -125,41 +114,15 @@ async def choose_time(callback_query: types.CallbackQuery):
                 InlineKeyboardButton(
                     text="15 мин", callback_data=f"set_time:{order_id}:{source}:15"
                 ),
-            ],
-            [
+                ],[
                 InlineKeyboardButton(
                     text="20 мин", callback_data=f"set_time:{order_id}:{source}:20"
                 ),
                 InlineKeyboardButton(
                     text="25 мин", callback_data=f"set_time:{order_id}:{source}:25"
                 ),
-                InlineKeyboardButton(
-                    text="30 мин", callback_data=f"set_time:{order_id}:{source}:30"
-                ),
             ],
-            [
-                InlineKeyboardButton(
-                    text="35 мин", callback_data=f"set_time:{order_id}:{source}:35"
-                ),
-                InlineKeyboardButton(
-                    text="40 мин", callback_data=f"set_time:{order_id}:{source}:40"
-                ),
-                InlineKeyboardButton(
-                    text="45 мин", callback_data=f"set_time:{order_id}:{source}:45"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    text="50 мин", callback_data=f"set_time:{order_id}:{source}:50"
-                ),
-                InlineKeyboardButton(
-                    text="55 мин", callback_data=f"set_time:{order_id}:{source}:55"
-                ),
-                InlineKeyboardButton(
-                    text="60 мин", callback_data=f"set_time:{order_id}:{source}:60"
-                ),
-            ],
-        ]
+        ],
     )
 
     try:
@@ -171,8 +134,6 @@ async def choose_time(callback_query: types.CallbackQuery):
 @bot_router.callback_query(F.data.startswith("set_time"))
 async def set_time(callback_query: types.CallbackQuery):
     uz_time = datetime.now(ZoneInfo("Asia/Tashkent"))
-
-    # await callback_query.answer()
 
     _, order_id, source, minutes = callback_query.data.split(":", 3)
 
@@ -192,7 +153,6 @@ async def set_time(callback_query: types.CallbackQuery):
         "acceptedBy": f"{callback_query.from_user.first_name} {callback_query.from_user.last_name}",
         "operatorLogin": f"@{callback_query.from_user.username}",
     }
-    print(body)
     status = "awaiting_courier"
 
     try:
@@ -209,9 +169,8 @@ async def set_time(callback_query: types.CallbackQuery):
 
     else:
         url = f"https://new.aurora-api.uz/api-node/api/orders/update/{order_id}/"
-    
+
     headers = {"Content-Type": "application/json"}
     data = {"status": status, "preparation_time": body}
     resp = requests.put(url, json=data, headers=headers)
     return resp
-    # отправляем обновление на сервер

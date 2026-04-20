@@ -102,6 +102,10 @@ class OFDSchema(BaseModel):
     chat_id: Optional[int] = -5157406566
 
 
+class CancelOrderDTO(BaseModel):
+    order_id: int
+
+
 # {
 #     "created_by": "Gulyamov Mirzogulyam",
 #     "products": [

@@ -3,8 +3,11 @@ import tempfile
 import requests
 from fastapi import APIRouter, File, Form, UploadFile, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
+from bot.handlers.reject_order import handle_order_canceled
+from config.redis_client import save_order_message
 from schemas.fianance_failed_schema import FinanceFailPayload
 from schemas.notifications import (
+    CancelOrderDTO,
     PayloadModel,
     AcceptOrderModel,
     Code,
@@ -83,11 +86,18 @@ async def new_order_notification(payload: PayloadModel, request: Request):
     )
 
     try:
-        await bot.send_message(
+        msg = await bot.send_message(
             chat_id=payload.orders_chat_id,
             text=create_order(payload),
             parse_mode="html",
             reply_markup=keyboard,
+        )
+        # 🔴 сохраняем связь
+        await save_order_message(
+            order_id=payload.id,
+            chat_id=payload.orders_chat_id,
+            message_id=msg.message_id,
+            text=create_order(payload)
         )
 
         return {"message": "Notify has successfully sended", "code": 2}
@@ -105,6 +115,12 @@ async def new_order_notification(payload: PayloadModel, request: Request):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Ошибка при получении orders_chat_id",
         )
+
+
+@router.post("/reject-order")
+async def reject_order(payload: CancelOrderDTO):
+    response = await handle_order_canceled(payload.order_id)
+    return response
 
 
 @router.post("/web/new-order")

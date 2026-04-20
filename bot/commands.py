@@ -28,7 +28,6 @@ async def send_message(message: types.Message):
 @dp.message(Command("start"))
 async def send_message(message: types.Message):
     phone_id = message.text[7:]
-    print(phone_id)
     if not phone_id:
 
         return await bot.send_message(
@@ -49,3 +48,4 @@ async def send_message(message: types.Message):
         text=f"Ваш код верификации <code><b>{code}</b></code> не сообщите его никому. \nДанный код действителен в течении 15 минут",
         parse_mode="HTML",
     )
+
