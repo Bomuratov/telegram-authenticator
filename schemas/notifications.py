@@ -24,6 +24,14 @@ class NotifyModel(BaseModel):
 #     comment: bool
 #     user: int
 
+class DiscountItems(BaseModel):
+    id: int
+    name: str
+    photo: str
+    quantity: int
+    price: int
+    originalPrice: int
+
 
 class PayloadModel(BaseModel):
     id: int
@@ -42,6 +50,9 @@ class PayloadModel(BaseModel):
     delivery_price: int
     user_phone_number: str
     location: dict
+    discount_items: List[DiscountItems]
+    order_coast: str
+    payment_type: str
 
 
 class CourierModel(BaseModel):

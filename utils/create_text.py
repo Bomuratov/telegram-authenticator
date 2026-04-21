@@ -10,59 +10,136 @@ from zoneinfo import ZoneInfo
 
 
 
+# def create_order(payload: PayloadModel):
+#     order_id = payload.id
+#     total_price = int(payload.order_coast)
+#     products = payload.products
+#     restaurant = payload.restaurant
+#     rest_name = restaurant["name"]
+#     lat = payload.lat
+#     long = payload.long
+#     header = f"<b>Заказ</b> #{order_id}A \n\n"
+#     order = "<b>🧾  Состав заказа:</b>\n"
+#     warehouse = f"<b>Склад: {rest_name}</b>\n\n"
+#     linear = "<b>————————————————</b>\n"
+#     info = ""
+#     comment = f"⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else "⚠️ Комментарий к заказу:\n<b></b>"
+
+#     delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
+
+#     for product in products:
+#         options = product_options = product.get("options")
+#         if options:
+#             name = product["name"]
+#             quantity = product["quantity"]
+#             price = product["options"]["price"] or product["price"]
+#             line = f"<b>—— {name} ({options['name']}) х {quantity} от {price} сум.</b>\n"
+#             info += line
+#         else:
+#             name = product["name"]
+#             quantity = product["quantity"]
+#             price = product["price"]
+#             line = f"<b>—— {name} х {quantity} от {price} сум.</b>\n"
+#             info += line
+
+#     full = (
+#         header
+#         + warehouse
+#         + order
+#         + linear
+#         + info
+#         + linear
+#         + f"<b>💳 Итого: {total_price} UZS</b>\n"
+#         + linear
+#         + comment or None
+#     )
+#     return full
+
+
 def create_order(payload: PayloadModel):
     order_id = payload.id
-    total_price = payload.total_price
+    total_price = int(payload.order_coast)
     products = payload.products
+    discount_items = payload.discount_items or []
+
     restaurant = payload.restaurant
-    rest_name = restaurant["name"]
-    lat = payload.lat
-    long = payload.long
-    header = f"<b>Заказ</b> #{order_id}A \n\n"
-    order = "<b>🧾  Состав заказа:</b>\n"
-    warehouse = f"<b>Склад: {rest_name}</b>\n\n"
-    # created_by = f"<b>Заказал: {payload.created_by} {payload.user_phone_number}</b>\n"
-    linear = "<b>————————————————</b>\n"
+    rest_name = restaurant.get("name")
+
+    header = f"<b>Заказ</b> #{order_id}A \n\n\n"
+    warehouse = f"<b>Склад: {rest_name}</b>\n\n\n"
+
+    order_block = "<b>🧾 Состав заказа:</b>\n"
+    discount_block = "\n\n<b>🎁 Акционные товары:</b>\n"
+
+    linear = "<b>———————————————</b>"
+
     info = ""
-    comment = f"⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else "⚠️ Комментарий к заказу:\n<b></b>"
+    discount_info = ""
+    comment = f"\n\n⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else ""
 
-    delivery_price = f"Сумму доставки: {payload.delivery_price} UZS"
-    # location = f"Адрес доставки: {payload.location['address'] if payload.location['address'] else ''}\n\n"
-    # if options:
-    #     for product in products:
-    #         name = product["name"]
-    #         quantity = product["quantity"]
-    #         price = product["price"]
-    #         option_name = product["options"]["name"] if "options" in product else "Без опций"
-    #         line = f"<b>— {name} ({option_name}) х {quantity} от {price} сум</b>\n"
-    #         info += line
-
+    # --- обычные товары ---
     for product in products:
-        options = product_options = product.get("options")
-        if options:
-            name = product["name"]
-            quantity = product["quantity"]
-            price = product["options"]["price"] or product["price"]
-            line = f"<b>—— {name} ({options['name']}) х {quantity} от {price} сум.</b>\n"
-            info += line
-        else:
-            name = product["name"]
-            quantity = product["quantity"]
-            price = product["price"]
-            line = f"<b>—— {name} х {quantity} от {price} сум.</b>\n"
-            info += line
+        options = product.get("options")
 
+        name = product.get("name")
+        quantity = product.get("quantity")
+        price = product.get("price")
+
+        if options:
+            opt_name = options.get("name")
+            opt_price = options.get("price") or price
+            line = f"<b>— {name} ({opt_name}) × {quantity} = {opt_price * quantity} сум</b>\n"
+        else:
+            line = f"<b>— {name} × {quantity} по {price} сум</b>\n"
+
+        info += line
+
+    # --- акционные товары ---
+    for item in discount_items:
+        name = item.name
+        quantity = item.quantity
+        price = item.price
+        original = item.originalPrice
+
+        if original and original > price:
+            line = (
+                f"<b>— {name} × {quantity}</b>"
+                f" по <s>{original * quantity} сум</s> → <b>{price * quantity} сум</b>\n"
+            )
+        else:
+            line = f"<b>— {name} × {quantity} = {price * quantity} сум</b>\n\n"
+
+        discount_info += line
+
+
+    # --- тип оплаты ---
+    payment_map = {
+        "cash": "💵 Наличными",
+        "card": "💳 Карта",
+        "online": "🌐 Онлайн",
+    }
+
+    payment = payment_map.get(payload.payment_type, payload.payment_type)
+    payment_block = f"\n\n<b>Способ оплаты: {payment}</b>\n"
+
+    # --- финальная сборка ---
     full = (
         header
         + warehouse
-        + order
-        + linear
+        + order_block
+
         + info
-        + linear
-        + f"<b>💳 Итого: {total_price} UZS</b>\n"
-        + linear
-        + comment or None
+
+        + (discount_block + discount_info if discount_info else "")
+
+        + f"\n\n<b>💳 Итого: {total_price} сум</b>\n"
+
+        + payment_block
+
+        + comment
+    
     )
+
     return full
 
 

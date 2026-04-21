@@ -17,17 +17,8 @@
 #         print(f'Произошла ошибка: {e}')
 #         print(f'Статус: {response.status_code}, Тело ответа: {response.text}')
 #         return None
-    
+
 # print(send_code(url="https://api.aurora-api.uz/fastapi/send_code/", user_id="998881836222", data="123456"))
-
-
-
-
-
-
-
-
-
 
 
 # # worker_processes 1;
@@ -108,6 +99,7 @@ DATABASE = {
 import psycopg2
 from config import settings
 
+
 def get_chat_id_by_phone(phone: str):
     conn = psycopg2.connect(**DATABASE)
     cur = conn.cursor()
@@ -122,93 +114,88 @@ def get_chat_id_by_phone(phone: str):
 
     return result[0] if result else None  # Возвращаем chat_id или None
 
+
 print(get_chat_id_by_phone(phone="test"))
 
 
 
-
-
 {
-    "created_by": "null null",
+    "created_by": "Умид Бомуротов",
     "products": [
         {
-            "id": 5,
-            "name": "Биф Бургер",
-            "price": 45000,
-            "photo": "https://stage.aurora-api.uz/media/Olivia/category/%D0%91%D1%83%D1%80%D0%B3%D0%B5%D1%80/%D0%91%D0%B8%D1%84_%D0%91%D1%83%D1%80%D0%B3%D0%B5%D1%80.jpg",
-            "options": {
-                "id": 112,
-                "name": "Маленкий",
-                "price": 45000,
-                "is_active": true
-            },
-            "quantity": 1
-        },
-        {
-            "id": 6,
-            "photo": "https://stage.aurora-api.uz/media/Olivia/category/%D0%91%D1%83%D1%80%D0%B3%D0%B5%D1%80/%D0%A7%D0%B8%D0%B7%D0%B1%D1%83%D1%80%D0%B3%D0%B5%D1%80.jpg",
-            "name": "Чизбургер",
-            "price": 55000,
-            "quantity": 1
+            "id": 18,
+            "name": "Цезарь",
+            "photo": "https://new.aurora-api.uz/media/Olivia/category/%D0%A1%D0%B0%D0%BB%D0%B0%D1%82%D1%8B/%D0%A6%D0%B5%D0%B7%D0%B0%D1%80%D1%8C_nPgQyvn.jpeg",
+            "price": 2000,
+            "discount": True,
+            "quantity": 1,
         }
     ],
-    "total_price": 109000,
-    "lat": "39.748301953098725",
-    "long": "64.41681353066139",
-    "user_id": 79,
-    "user_phone_number": "+998991112233",
-    "orders_chat_id": -1002641409178,
+    "total_price": 7000,
+    "lat": "39.7470289",
+    "long": "64.4022198",
+    "user_id": 1,
+    "user_phone_number": "+998881836222",
+    "orders_chat_id": "-1002641409178",
     "restaurant": {
         "id": 3,
         "name": "Olivia",
-        "address": "Chevar",
-        "photo": "https://stage.aurora-api.uz/media/Olivia/logo/0889x24izl.webp",
+        "photo": "https://new.aurora-api.uz/media/Olivia/logo/0889x24izl.webp",
+        "address": "Гор Газ (София)",
         "phone": "не указан",
-        "lat": "39.770515",
-        "long": "64.445063"
+        "lat": "39.763550",
+        "long": "64.430128",
     },
     "location": {
-        "id": 213,
+        "id": 460,
         "country_ru": "Узбекистан",
         "country_en": "Uzbekistan",
         "state_ru": "Бухарская область",
         "state_en": "Bukhara Region",
         "city_ru": "Бухара",
         "city_en": "Bukhara",
-        "county_ru": null,
-        "county_en": null,
+        "county_ru": None,
+        "county_en": None,
         "key_zone": "UZ-BU",
-        "lat": "39.748301953098725",
-        "long": "64.41681353066139",
-        "address": "Пиридастгир улица, 5Б микрорайон",
-        "street": null,
-        "name": "Бухара",
-        "house": null,
+        "lat": "39.765387861294485",
+        "long": "64.43027615547182",
+        "address": "Мустакиллик улица 16",
+        "street": None,
+        "name": "Sofia Olivia adress",
+        "house": None,
         "apartment": "",
         "floor": "",
         "entrance": "",
         "comment": "",
-        "is_active": true,
+        "is_active": True,
         "delivery_zone": "Bukhara",
-        "is_deliverable": false,
-        "user": 79
+        "is_deliverable": True,
+        "user": 1,
     },
     "status": "new",
-    "destination": {
-        "distance": "4.2 km",
-        "duration": "11 mins"
-    },
-    "delivery_price": 4000,
+    "destination": {"distance": "1.1 km", "duration": "4 mins"},
+    "delivery_price": 0,
     "comment": "",
-    "courier": null,
+    "order_coast": "2000",
+    "payment_type": "cash",
+    "discount_items": [
+        {
+            "id": 18,
+            "name": "Цезарь",
+            "photo": "https://new.aurora-api.uz/media/Olivia/category/%D0%A1%D0%B0%D0%BB%D0%B0%D1%82%D1%8B/%D0%A6%D0%B5%D0%B7%D0%B0%D1%80%D1%8C_nPgQyvn.jpeg",
+            "quantity": 1,
+            "price": 0,
+            "originalPrice": 2000,
+        }
+    ],
+    "courier": None,
     "fee": 5000,
-    "preparation_time": null,
-    "check_info": null,
-    "total_profit": null,
-    "order_coast": null,
-    "id": 1233,
-    "created_at": "2026-04-20T03:37:08.308Z",
-    "updated_at": "2026-04-20T03:37:08.308Z",
-    "payment_type": "card",
-    "reviewStatus": "none"
+    "preparation_time": None,
+    "check_info": None,
+    "total_profit": None,
+    "id": 1946,
+    "created_at": "2026-04-21T04:44:48.617Z",
+    "updated_at": "2026-04-21T04:44:48.617Z",
+    "payment_status": "pending",
+    "reviewStatus": "none",
 }
