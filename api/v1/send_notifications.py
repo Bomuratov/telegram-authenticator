@@ -71,8 +71,8 @@ router = APIRouter()
 @router.post("/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
     source = request.headers.get("X-Source")
-    # data = request.body
-    print(payload)
+    raw_body = await request.json()
+    print("RAW BODY:", raw_body)
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
