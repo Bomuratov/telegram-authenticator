@@ -68,8 +68,8 @@ def create_order(payload: PayloadModel):
     header = f"<b>Заказ</b> #{order_id}A \n\n\n"
     warehouse = f"<b>Склад: {rest_name}</b>\n\n\n"
 
-    order_block = "<b>🧾 Состав заказа:</b>\n"
-    discount_block = "\n\n<b>🎁 Акционные товары:</b>\n"
+    order_block = "<b>🧾 Состав заказа:</b>\n\n"
+    discount_block = "\n\n<b>🎁 Акционные товары:</b>\n\n"
 
     linear = "<b>———————————————</b>"
 
@@ -88,9 +88,9 @@ def create_order(payload: PayloadModel):
         if options:
             opt_name = options.get("name")
             opt_price = options.get("price") or price
-            line = f"<b>— {name} ({opt_name}) × {quantity} = {opt_price * quantity} сум</b>\n"
+            line = f"<b>— {name} ({opt_name}) × {quantity} = {opt_price * quantity} сум</b>\n\n"
         else:
-            line = f"<b>— {name} × {quantity} по {price} сум</b>\n"
+            line = f"<b>— {name} × {quantity} по {price} сум</b>\n\n"
 
         info += line
 
@@ -104,7 +104,7 @@ def create_order(payload: PayloadModel):
         if original and original > price:
             line = (
                 f"<b>— {name} × {quantity}</b>"
-                f" по <s>{original * quantity} сум</s> → <b>{price * quantity} сум</b>\n"
+                f" по <s>{original * quantity} сум</s> → <b>{price * quantity} сум</b>\n\n"
             )
         else:
             line = f"<b>— {name} × {quantity} = {price * quantity} сум</b>\n\n"
