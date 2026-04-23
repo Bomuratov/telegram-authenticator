@@ -3,12 +3,13 @@ from aiogram.filters import Command
 from config import settings
 from .order_callback import bot_router
 from .handlers.reviews import review_router
-
+from bot.handlers.courier.pay_callback import pay_router
 
 bot = Bot(token=f"{settings.bot.token}")
 dp = Dispatcher()
 dp.include_router(bot_router)
 dp.include_router(review_router)
+dp.include_router(pay_router)
 
 
 @dp.message(Command("myid"))
