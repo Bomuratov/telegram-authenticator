@@ -3,7 +3,7 @@ import tempfile
 import requests
 from fastapi import APIRouter, File, Form, UploadFile, status, HTTPException, Request
 from aiogram.exceptions import TelegramBadRequest
-from bot.handlers.order_paid import handle_order_paid
+from bot.handlers.order_paid import handle_order_fail, handle_order_paid
 from bot.handlers.reject_order import handle_order_canceled
 from config.redis_client import save_order_message
 from schemas.fianance_failed_schema import FinanceFailPayload
@@ -191,6 +191,12 @@ async def accept_order(payload: AcceptOrderModel):
 @router.post("/order-paid")
 async def order_paid(dto: PaidOrderDTO):
     await handle_order_paid(dto.order_id)
+    
+    return {"status": "ok"}
+
+@router.post("/order-fail")
+async def order_paid(dto: PaidOrderDTO):
+    await handle_order_fail(dto.order_id)
     
     return {"status": "ok"}
 
