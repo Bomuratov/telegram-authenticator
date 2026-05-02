@@ -49,7 +49,6 @@ async def handle_order_fail(order_id: int):
             text=text,
             reply_to_message_id=message_id 
         )
-        await delete_order_message(order_id)
 
     except TelegramBadRequest as e:
         print(f"Telegram error: {e}")
