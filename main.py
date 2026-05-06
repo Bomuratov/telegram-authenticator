@@ -8,6 +8,7 @@ from api.v1.send_code import router as send_code
 from api.v1.send_notifications import router as send_notify
 from api.v1.send_support_case import router as send_support_case
 from api.v1.courier_payout_notify import router as courier_payout
+from api.v1.order_notification import router as order_router
 
 
 logging.basicConfig(level=logging.INFO)
@@ -32,6 +33,7 @@ fapp.include_router(send_code, tags=["send_code"])
 fapp.include_router(send_notify, tags=["send_notify"])
 fapp.include_router(send_support_case, tags=["send_support_case"])
 fapp.include_router(courier_payout, tags=["courier_payout"])
+fapp.include_router(order_router, tags=["order_router"])
 
 
 fapp.add_middleware(

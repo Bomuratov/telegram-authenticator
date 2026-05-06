@@ -7,6 +7,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 from config.redis_client import delete_order_message
+from core.order_context import get_order_source
 from utils.send_update import send_order_update, send_stage_order_update
 
 logging.basicConfig(level=logging.INFO)
@@ -19,8 +20,8 @@ bot_router = Router()
 @bot_router.callback_query(F.data.startswith("reject_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
     try:
-        _, order_id, source = callback_query.data.split(":", 2)
-        logger.info(f"Извлекаем: base_url='{source}'")
+        _, order_id = callback_query.data.split(":")
+        source = await get_order_source(int(order_id))
     except ValueError as e:
         logger.error(
             f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}"
@@ -58,8 +59,8 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 @bot_router.callback_query(F.data.startswith("accept_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
     try:
-        _, order_id, source = callback_query.data.split(":", 2)
-        logger.info(f"Извлекаем: base_url='{source}'")
+        _, order_id = callback_query.data.split(":")
+        source = await get_order_source(int(order_id))
     except ValueError as e:
         logger.error(
             f"Ошибка разбора callback_data: {callback_query.data}, ошибка: {e}"
@@ -98,27 +99,27 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 @bot_router.callback_query(F.data.startswith("choose_time"))
 async def choose_time(callback_query: types.CallbackQuery):
 
-    _, order_id, source = callback_query.data.split(":", 2)
+    _, order_id = callback_query.data.split(":")
 
 
     keyboard = InlineKeyboardMarkup(
         inline_keyboard=[
             [
                 InlineKeyboardButton(
-                    text="5 мин", callback_data=f"set_time:{order_id}:{source}:5"
+                    text="5 мин", callback_data=f"set_time:{order_id}:5"
                 ),
                 InlineKeyboardButton(
-                    text="10 мин", callback_data=f"set_time:{order_id}:{source}:10"
+                    text="10 мин", callback_data=f"set_time:{order_id}:10"
                 ),
                 InlineKeyboardButton(
-                    text="15 мин", callback_data=f"set_time:{order_id}:{source}:15"
+                    text="15 мин", callback_data=f"set_time:{order_id}:15"
                 ),
                 ],[
                 InlineKeyboardButton(
-                    text="20 мин", callback_data=f"set_time:{order_id}:{source}:20"
+                    text="20 мин", callback_data=f"set_time:{order_id}:20"
                 ),
                 InlineKeyboardButton(
-                    text="25 мин", callback_data=f"set_time:{order_id}:{source}:25"
+                    text="25 мин", callback_data=f"set_time:{order_id}:25"
                 ),
             ],
         ],
@@ -134,7 +135,10 @@ async def choose_time(callback_query: types.CallbackQuery):
 async def set_time(callback_query: types.CallbackQuery):
     uz_time = datetime.now(ZoneInfo("Asia/Tashkent"))
 
-    _, order_id, source, minutes = callback_query.data.split(":", 3)
+    _, order_id, minutes = callback_query.data.split(":")
+    order_id = int(order_id)
+
+    source = await get_order_source(order_id)
 
     time = uz_time + timedelta(minutes=int(minutes))
 

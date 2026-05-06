@@ -68,7 +68,7 @@ router = APIRouter()
 # }
 
 
-@router.post("/new-order")
+# @router.post("/new-order")
 async def new_order_notification(payload: PayloadModel, request: Request):
     source = request.headers.get("X-Source")
     raw_body = await request.json()
