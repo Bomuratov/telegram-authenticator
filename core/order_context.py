@@ -1,16 +1,16 @@
-from config.redis_client import redis
+from config.redis_client import redis_client
 
 ORDER_SOURCE_KEY = "order_source:{order_id}"
 
 
 async def set_order_source(order_id: int, source: str, ttl: int = 3600):
     key = ORDER_SOURCE_KEY.format(order_id=order_id)
-    await redis.set(key, source, ex=ttl)
+    await redis_client.set(key, source, ex=ttl)
 
 
 async def get_order_source(order_id: int) -> str:
     key = ORDER_SOURCE_KEY.format(order_id=order_id)
-    source = await redis.get(key)
+    source = await redis_client.get(key)
 
     if not source:
         return "prod"  # fail-safe

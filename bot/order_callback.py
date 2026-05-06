@@ -168,9 +168,11 @@ async def set_time(callback_query: types.CallbackQuery):
         return
 
     if source == "stage":
+        logger.info("Запуск функции для стейдж сервера")
         url = f"https://stage.aurora-api.uz/api-node/api/orders/update/{order_id}/"
 
     else:
+        logger.info("Запуск функции для прод сервера")
         url = f"https://new.aurora-api.uz/api-node/api/orders/update/{order_id}/"
 
     headers = {"Content-Type": "application/json"}
