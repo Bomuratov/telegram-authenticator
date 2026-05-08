@@ -32,6 +32,15 @@ class DiscountItems(BaseModel):
     price: int
     originalPrice: int
 
+class ContainerItem(BaseModel):
+    id: int
+    name: str
+    size: str
+    photo: str
+    price: int
+    quantity: int
+    is_active: bool
+
 
 class PayloadModel(BaseModel):
     id: int
@@ -53,6 +62,7 @@ class PayloadModel(BaseModel):
     discount_items: List[DiscountItems]
     order_coast: str
     payment_type: str
+    containers: List[ContainerItem]
 
 
 class CourierModel(BaseModel):

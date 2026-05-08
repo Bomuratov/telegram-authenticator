@@ -75,6 +75,8 @@ def create_order(payload: PayloadModel):
 
     info = ""
     discount_info = ""
+    containers_block = "\n\n<b>📦 Контейнеры:</b>\n\n"
+    containers_info = ""
     comment = f"\n\n⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else ""
 
     # --- обычные товары ---
@@ -122,6 +124,24 @@ def create_order(payload: PayloadModel):
     payment = payment_map.get(payload.payment_type, payload.payment_type)
     payment_block = f"\n\n<b>Способ оплаты: {payment}</b>\n"
 
+    for container in payload.containers or []:
+        if not container.is_active:
+            continue
+
+        name = container.name
+        size = container.size
+        quantity = container.quantity
+        price = container.price
+
+        total = price * quantity
+
+        if price == 0:
+            line = f"<b>— {name} ({size}) × {quantity} = Бесплатно</b>\n\n"
+        else:
+            line = f"<b>— {name} ({size}) × {quantity} = {total} сум</b>\n\n"
+
+        containers_info += line
+
     # --- финальная сборка ---
     full = (
         header
@@ -129,6 +149,8 @@ def create_order(payload: PayloadModel):
         + order_block
 
         + info
+
+        + (containers_block + containers_info if containers_info else "")
 
         + (discount_block + discount_info if discount_info else "")
 
