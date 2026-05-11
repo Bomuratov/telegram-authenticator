@@ -90,7 +90,7 @@ def create_order(payload: PayloadModel):
         if options:
             opt_name = options.get("name")
             opt_price = options.get("price") or price
-            line = f"<b>— {name} ({opt_name}) × {quantity} = {opt_price * quantity} сум</b>\n\n"
+            line = f"<b>— {name} ({opt_name}) × {quantity} по {opt_price} сум</b>\n\n"
         else:
             line = f"<b>— {name} × {quantity} по {price} сум</b>\n\n"
 
@@ -138,7 +138,7 @@ def create_order(payload: PayloadModel):
         if price == 0:
             line = f"<b>— {name} ({size}) × {quantity} = Бесплатно</b>\n\n"
         else:
-            line = f"<b>— {name} ({size}) × {quantity} = {total} сум</b>\n\n"
+            line = f"<b>— {name} ({size}) × {quantity} по {price} сум</b>\n\n"
 
         containers_info += line
 
