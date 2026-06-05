@@ -1,8 +1,7 @@
-from pydantic import BaseModel, field_validator
-from typing import Dict, Any, List, Optional, Union
+from pydantic import BaseModel
+from typing import Dict, Any, List, Optional
 from datetime import datetime
 from enum import Enum
-
 
 
 class NotifyModel(BaseModel):
@@ -24,15 +23,6 @@ class NotifyModel(BaseModel):
 #     comment: Optional[str]
 #     comment: bool
 #     user: int
-
-class DiscountPercentInfo(BaseModel):
-    id: int
-    text: str
-    type: str
-    discount_sum: int
-    discount_price: int
-    discount_value: int
-
 
 class DiscountItems(BaseModel):
     id: int
@@ -56,30 +46,23 @@ class PayloadModel(BaseModel):
     id: int
     created_by: str
     user_id: int
-    orders_chat_id: str | None = None
+    orders_chat_id: int
     status: str
     lat: str
     long: str
     total_price: int
     updated_at: str
-    restaurant: Dict[str, Any]
-    products: List[Dict[str, Any]]
+    restaurant: dict
+    products: List[dict]
     created_at: str
     comment: str
     delivery_price: int
     user_phone_number: str
-    location: Dict[str, Any]
+    location: dict
     discount_items: List[DiscountItems]
     order_coast: str
     payment_type: str
-    containers: List[Dict[str, Any]]
-
-    # 🔥 ВАЖНО: НЕ UNION, НЕ CUSTOM TYPE
-    discount_info: Optional[Dict[str, Any]] = None
-
-    model_config = {
-        "extra": "ignore",   # 🔥 убирает 422 из-за лишних полей Express
-    }
+    containers: List[ContainerItem]
 
 
 class CourierModel(BaseModel):
