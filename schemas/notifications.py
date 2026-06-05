@@ -1,7 +1,8 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
 from enum import Enum
+
 
 
 class NotifyModel(BaseModel):
@@ -24,14 +25,6 @@ class NotifyModel(BaseModel):
 #     comment: bool
 #     user: int
 
-class DiscountItems(BaseModel):
-    id: int
-    name: str
-    photo: str
-    quantity: int
-    price: int
-    originalPrice: int
-
 class DiscountPercentInfo(BaseModel):
     id: int
     text: str
@@ -40,12 +33,14 @@ class DiscountPercentInfo(BaseModel):
     discount_price: int
     discount_value: int
 
-DiscountInfo = Optional[
-    Union[
-        DiscountPercentInfo,
-        List[DiscountItems]
-    ]
-]
+
+class DiscountItems(BaseModel):
+    id: int
+    name: str
+    photo: str
+    quantity: int
+    price: int
+    originalPrice: int
 
 class ContainerItem(BaseModel):
     id: int
@@ -61,24 +56,30 @@ class PayloadModel(BaseModel):
     id: int
     created_by: str
     user_id: int
-    orders_chat_id: int
+    orders_chat_id: str | None = None
     status: str
     lat: str
     long: str
     total_price: int
     updated_at: str
-    restaurant: dict
-    products: List[dict]
+    restaurant: Dict[str, Any]
+    products: List[Dict[str, Any]]
     created_at: str
     comment: str
     delivery_price: int
     user_phone_number: str
-    location: dict
+    location: Dict[str, Any]
     discount_items: List[DiscountItems]
     order_coast: str
     payment_type: str
-    containers: List[ContainerItem]
-    discount_info: DiscountInfo
+    containers: List[Dict[str, Any]]
+
+    # 🔥 ВАЖНО: НЕ UNION, НЕ CUSTOM TYPE
+    discount_info: Optional[Dict[str, Any]] = None
+
+    model_config = {
+        "extra": "ignore",   # 🔥 убирает 422 из-за лишних полей Express
+    }
 
 
 class CourierModel(BaseModel):
