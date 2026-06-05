@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Dict, Any, List, Optional
+from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
 from enum import Enum
 
@@ -32,6 +32,21 @@ class DiscountItems(BaseModel):
     price: int
     originalPrice: int
 
+class DiscountPercentInfo(BaseModel):
+    id: int
+    text: str
+    type: str
+    discount_sum: int
+    discount_price: int
+    discount_value: int
+
+DiscountInfo = Optional[
+    Union[
+        DiscountPercentInfo,
+        List[DiscountItems]
+    ]
+]
+
 class ContainerItem(BaseModel):
     id: int
     name: str
@@ -63,6 +78,7 @@ class PayloadModel(BaseModel):
     order_coast: str
     payment_type: str
     containers: List[ContainerItem]
+    discount_info: DiscountInfo
 
 
 class CourierModel(BaseModel):
