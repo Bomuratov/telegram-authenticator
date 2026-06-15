@@ -16,8 +16,8 @@ router = APIRouter()
 async def new_order_notification(payload: PayloadModel, request: Request):
     raw_source = request.headers.get("X-Source")
     source = normalize_source(raw_source)
-    # print("REQUEST DATA: ",request.body)
-    # print("PAYLOAD: ",payload)
+    print("REQUEST DATA: ",request.body)
+    print("PAYLOAD: ",payload)
 
     # ✅ сохраняем source
     await set_order_source(payload.id, source)
