@@ -80,24 +80,25 @@ def create_order(payload: PayloadModel):
     comment = f"\n\n⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else ""
 
     # --- обычные товары ---
+    # --- обычные товары ---
     for product in products:
         name = product.name
         quantity = product.quantity
 
-        if product.discount_info:
-            if product.discount_info.type == "percent_discount":
-                original = product.price
-                discounted = product.discount_info.discount_price
+        line = (
+            f"<b>— {name} × {quantity} "
+            f"по {product.price} сум</b>\n\n"
+        )
 
-                line = (
-                    f"<b>— {name} × {quantity}  по </b> "
-                    f"<s>{original * quantity} сум</s> → "
-                    f"<b>{discounted * quantity} сум</b>\n\n"
-                )
-        else:
+        if (
+            product.discount_info
+            and product.discount_info.type == "percent_discount"
+            and product.discount_info.discount_price is not None
+        ):
             line = (
-                f"<b>— {name} × {quantity} "
-                f"по {product.price} сум</b>\n\n"
+                f"<b>— {name} × {quantity}</b> "
+                f"по <s>{product.price * quantity} сум</s> → "
+                f"<b>{product.discount_info.discount_price * quantity} сум</b>\n\n"
             )
 
         info += line
