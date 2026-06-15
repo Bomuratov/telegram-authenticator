@@ -84,10 +84,16 @@ def create_order(payload: PayloadModel):
     for product in products:
         name = product.name
         quantity = product.quantity
+        price = product.price
+
+        if product.options:
+            name = f"{name} ({product.options.name})"
+            price = product.options.price
+
 
         line = (
             f"<b>— {name} × {quantity} "
-            f"по {product.price} сум</b>\n\n"
+            f"по {price} сум</b>\n\n"
         )
 
         if (
@@ -97,7 +103,7 @@ def create_order(payload: PayloadModel):
         ):
             line = (
                 f"<b>— {name} × {quantity}</b> "
-                f"по <s>{product.price * quantity} сум</s> → "
+                f"по <s>{price * quantity} сум</s> → "
                 f"<b>{product.discount_info.discount_price * quantity} сум</b>\n\n"
             )
 

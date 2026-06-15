@@ -53,6 +53,11 @@ class DiscountPercentInfo(BaseModel):
     discount_value: int
 
 
+class ProductOption(BaseModel):
+    id: int
+    name: str
+    price: int
+    is_active: bool
 
 
 class ProductItem(BaseModel):
@@ -63,6 +68,7 @@ class ProductItem(BaseModel):
     discount: bool
     quantity: int
     container: bool
+    options: ProductOption | None = None
     discount_info: Optional[DiscountPercentInfo] = None
     container_info: Optional[dict] = None
 
