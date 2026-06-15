@@ -81,18 +81,24 @@ def create_order(payload: PayloadModel):
 
     # --- обычные товары ---
     for product in products:
-        options = product.get("options")
+        name = product.name
+        quantity = product.quantity
 
-        name = product.get("name")
-        quantity = product.get("quantity")
-        price = product.get("price")
+        if product.discount_info:
+            if product.discount_info.type == "percent_discount":
+                original = product.price
+                discounted = product.discount_info.discount_price
 
-        if options:
-            opt_name = options.get("name")
-            opt_price = options.get("price") or price
-            line = f"<b>— {name} ({opt_name}) × {quantity} по {opt_price} сум</b>\n\n"
+                line = (
+                    f"<b>— {name} × {quantity}  по </b> "
+                    f"<s>{original * quantity} сум</s> → "
+                    f"<b>{discounted * quantity} сум</b>\n\n"
+                )
         else:
-            line = f"<b>— {name} × {quantity} по {price} сум</b>\n\n"
+            line = (
+                f"<b>— {name} × {quantity} "
+                f"по {product.price} сум</b>\n\n"
+            )
 
         info += line
 
@@ -106,7 +112,7 @@ def create_order(payload: PayloadModel):
         if original and original > price:
             line = (
                 f"<b>— {name} × {quantity}</b>"
-                f" по <s>{original * quantity} сум</s> → <b>{price * quantity} сум</b>\n\n"
+                f" по <s>{original * quantity} сум</s> по <b>{price * quantity} сум</b>\n\n"
             )
         else:
             line = f"<b>— {name} × {quantity} = {price * quantity} сум</b>\n\n"

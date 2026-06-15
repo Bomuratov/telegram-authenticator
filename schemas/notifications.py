@@ -1,7 +1,8 @@
-from pydantic import BaseModel
-from typing import Dict, Any, List, Optional
+from pydantic import BaseModel, field_validator
+from typing import Dict, Any, List, Optional, Union
 from datetime import datetime
 from enum import Enum
+
 
 
 class NotifyModel(BaseModel):
@@ -24,6 +25,8 @@ class NotifyModel(BaseModel):
 #     comment: bool
 #     user: int
 
+
+
 class DiscountItems(BaseModel):
     id: int
     name: str
@@ -41,28 +44,67 @@ class ContainerItem(BaseModel):
     quantity: int
     is_active: bool
 
+class DiscountPercentInfo(BaseModel):
+    id: int
+    text: str
+    type: str
+    discount_sum: int
+    discount_price: int | None
+    discount_value: int
+
+
+
+
+class ProductItem(BaseModel):
+    id: int
+    name: str
+    photo: str
+    price: int
+    discount: bool
+    quantity: int
+    container: bool
+    discount_info: Optional[DiscountPercentInfo] = None
+    container_info: Optional[dict] = None
 
 class PayloadModel(BaseModel):
     id: int
     created_by: str
     user_id: int
-    orders_chat_id: int
+    orders_chat_id: str | None = None
     status: str
     lat: str
     long: str
     total_price: int
     updated_at: str
-    restaurant: dict
-    products: List[dict]
+    restaurant: Dict[str, Any]
+    products: List[ProductItem]
     created_at: str
     comment: str
     delivery_price: int
     user_phone_number: str
-    location: dict
+    location: Dict[str, Any]
     discount_items: List[DiscountItems]
     order_coast: str
     payment_type: str
     containers: List[ContainerItem]
+    discount_info: Optional[Dict[str, Any]] = None
+
+    model_config = {
+        "extra": "ignore",   # 🔥 убирает 422 из-за лишних полей Express
+    }
+
+    @field_validator("discount_info", mode="before")
+    @classmethod
+    def normalize_discount_info(cls, v):
+        if not v:
+            return None
+
+        # percent discount — оставляем как есть
+        if isinstance(v, dict) and v.get("type") == "percent_discount":
+            return v
+
+        # fallback (если вдруг будет другой формат)
+        return v
 
 
 class CourierModel(BaseModel):
