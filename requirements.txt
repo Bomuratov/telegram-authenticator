@@ -8,7 +8,6 @@ alembic==1.13.3
 annotated-types==0.7.0
 anyio==4.6.2.post1
 async-timeout==4.0.3
-# asyncpg==0.29.0
 attrs==24.2.0
 build==1.2.2.post1
 CacheControl==0.14.0
@@ -56,6 +55,8 @@ pydantic-settings==2.5.2
 pydantic_core==2.23.4
 pyproject_hooks==1.2.0
 python-dotenv==1.0.1
+python-multipart==0.0.26
+pytz==2026.1.post1
 RapidFuzz==3.10.0
 redis==5.2.1
 requests==2.32.3

@@ -2,6 +2,26 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 
+class Promo(BaseModel):
+    code: str
+    is_valid: bool
+    status: str
+    description: str
+    start_date: str
+    end_date: str
+
+class Discount(BaseModel):
+    discount: int
+    type: str
+    description: str
+    final_total: int
+    min_order_amount: int
+
+class Promotion(BaseModel):
+    promo: Promo
+    discount: Discount
+
+
 class DiscountPercentInfo(BaseModel):
     id: int
     text: str
@@ -137,3 +157,4 @@ class PayloadModel(BaseModel):
 
     discount_items: List[DiscountItem] = []
     containers: List[ContainerItem] = []
+    promotion: Promotion

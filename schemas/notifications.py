@@ -72,14 +72,33 @@ class ProductItem(BaseModel):
     discount_info: Optional[DiscountPercentInfo] = None
     container_info: Optional[dict] = None
 
+class Promo(BaseModel):
+    code: str
+    is_valid: bool
+    status: str
+    description: str
+    start_date: str
+    end_date: str
+
+class Discount(BaseModel):
+    discount: int
+    type: str
+    description: str
+    final_total: int
+    min_order_amount: int
+
+class Promotion(BaseModel):
+    promo: Promo
+    discount: Discount
+
 class PayloadModel(BaseModel):
     id: int
     created_by: str
     user_id: int
     orders_chat_id: str | None = None
     status: str
-    lat: str
-    long: str
+    lat: Optional[str] = None
+    long: Optional[str] = None
     total_price: int
     updated_at: str
     restaurant: Dict[str, Any]
@@ -94,6 +113,7 @@ class PayloadModel(BaseModel):
     payment_type: str
     containers: List[ContainerItem]
     discount_info: Optional[Dict[str, Any]] = None
+    # promotion: Promotion
 
     model_config = {
         "extra": "ignore",   # 🔥 убирает 422 из-за лишних полей Express
