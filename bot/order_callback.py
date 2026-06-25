@@ -19,6 +19,7 @@ bot_router = Router()
 
 @bot_router.callback_query(F.data.startswith("reject_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
+    await callback_query.answer()
     try:
         _, order_id = callback_query.data.split(":")
         source = await get_order_source(int(order_id))
@@ -58,6 +59,8 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 
 @bot_router.callback_query(F.data.startswith("accept_order"))
 async def action_accept_order(callback_query: types.CallbackQuery):
+    await callback_query.answer()
+
     try:
         _, order_id = callback_query.data.split(":")
         source = await get_order_source(int(order_id))
@@ -98,6 +101,7 @@ async def action_accept_order(callback_query: types.CallbackQuery):
 
 @bot_router.callback_query(F.data.startswith("choose_time"))
 async def choose_time(callback_query: types.CallbackQuery):
+    await callback_query.answer()
 
     _, order_id = callback_query.data.split(":")
 
@@ -133,6 +137,7 @@ async def choose_time(callback_query: types.CallbackQuery):
 
 @bot_router.callback_query(F.data.startswith("set_time"))
 async def set_time(callback_query: types.CallbackQuery):
+    await callback_query.answer()
     uz_time = datetime.now(ZoneInfo("Asia/Tashkent"))
 
     _, order_id, minutes = callback_query.data.split(":")
