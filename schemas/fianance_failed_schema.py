@@ -9,3 +9,9 @@ class FinanceFailPayload(BaseModel):
     error: str | None
     trace: Optional[str] = None
     data: Optional[str] = None
+
+
+
+
+
+    
