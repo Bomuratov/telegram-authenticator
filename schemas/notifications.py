@@ -48,9 +48,9 @@ class DiscountPercentInfo(BaseModel):
     id: int
     text: str
     type: str
-    discount_sum: int
-    discount_price: int | None
-    discount_value: int
+    discount_sum: int | None = None
+    discount_price: int | None = None
+    discount_value: int | None = None
 
 
 class ProductOption(BaseModel):
