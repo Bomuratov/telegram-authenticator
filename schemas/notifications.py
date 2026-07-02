@@ -97,8 +97,8 @@ class PayloadModel(BaseModel):
     user_id: int
     orders_chat_id: str | None = None
     status: str
-    lat: Optional[str] = None
-    long: Optional[str] = None
+    # lat: Optional[str] = None
+    # long: Optional[str] = None
     total_price: int
     updated_at: str
     restaurant: Dict[str, Any]
