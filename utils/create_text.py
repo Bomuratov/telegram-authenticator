@@ -98,7 +98,7 @@ def create_order(payload: PayloadModel):
 
         if (
             product.discount_info
-            and product.discount_info.type == "percent_discount"
+            and (product.discount_info.type == "percent_discount" or product.discount_info.type == "fixed_discount")
             and product.discount_info.discount_price is not None
         ):
             line = (
