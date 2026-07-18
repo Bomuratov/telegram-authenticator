@@ -19,7 +19,7 @@ async def save_order_message(order_id: int, chat_id: int, message_id: int, text:
             "message_id": message_id,
             "text": text
         }),
-        ex=60 * 60 * 3  # 3 часов TTL
+        ex=60 * 60 * 12  # 12 часов TTL
     )
 
 
