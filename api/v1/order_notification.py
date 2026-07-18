@@ -1,8 +1,8 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from fastapi import APIRouter, Request
-from config.redis_client import save_order_message
+from config.redis_client import save_order_message, get_order_message
 from core.order_context import normalize_source, set_order_source
-from schemas.notifications import PayloadModel
+from schemas.notifications import PayloadModel, PaidOrderDTO
 from utils.create_text import create_order
 from bot.commands import bot
 
@@ -52,3 +52,18 @@ async def new_order_notification(payload: PayloadModel, request: Request):
     )
 
     return {"message": "ok"}
+
+
+@router.post("/merchant-accepted")
+async def order_accepted(payload:PaidOrderDTO, request: Request):
+    message = await get_order_message(payload.order_id)
+    print(message)
+    await bot.edit_message_text(
+        chat_id=message["chat_id"],
+        message_id=message["message_id"],
+        reply_markup=None,
+        text=message["text"] + "\n\n<b>✅ Merchant</b>",
+        parse_mode="html",
+        
+    )
+    return {"ok": True}
