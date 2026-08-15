@@ -5,9 +5,7 @@ from core.order_context import normalize_source, set_order_source
 from schemas.notifications import PayloadModel, PaidOrderDTO
 from utils.create_text import create_order
 from bot.commands import bot
-
-
-
+import requests
 
 router = APIRouter()
 
@@ -16,8 +14,30 @@ router = APIRouter()
 async def new_order_notification(payload: PayloadModel, request: Request):
     raw_source = request.headers.get("X-Source")
     source = normalize_source(raw_source)
-    print("REQUEST DATA: ",request.body)
-    print("PAYLOAD: ",payload.json())
+    # print("REQUEST DATA: ",request.body)
+    # print("PAYLOAD: ",payload.json())
+    restaurant_name = payload.restaurant.get("name", None)
+    activated = False
+    try:
+        resp = requests.get(
+            url=f"https://new.aurora-api.uz/api/v1/merchant/activated/{restaurant_name}",
+            timeout=3,
+        )
+        resp.raise_for_status()
+
+        respons = resp.json()
+        activated = respons.get("merchant", False)
+
+    except requests.RequestException as e:
+        print(f"Ошибка запроса activated для {restaurant_name}: {e}")
+
+    except ValueError as e:
+        print(f"Некорректный JSON от activated для {restaurant_name}: {e}")
+
+    except Exception as e:
+        print(f"Неожиданная ошибка activated для {restaurant_name}: {e}")
+
+    print("activated:", activated)
 
     # ✅ сохраняем source
     await set_order_source(payload.id, source)
@@ -36,6 +56,8 @@ async def new_order_notification(payload: PayloadModel, request: Request):
             ]
         ]
     )
+    if activated:
+        keyboard = None
 
     msg = await bot.send_message(
         chat_id=payload.orders_chat_id,
@@ -48,14 +70,14 @@ async def new_order_notification(payload: PayloadModel, request: Request):
         order_id=payload.id,
         chat_id=payload.orders_chat_id,
         message_id=msg.message_id,
-        text=create_order(payload)
+        text=create_order(payload),
     )
 
     return {"message": "ok"}
 
 
 @router.post("/merchant-accepted")
-async def order_accepted(payload:PaidOrderDTO, request: Request):
+async def order_accepted(payload: PaidOrderDTO, request: Request):
     message = await get_order_message(payload.order_id)
     print(message)
     await bot.edit_message_text(
@@ -64,6 +86,5 @@ async def order_accepted(payload:PaidOrderDTO, request: Request):
         reply_markup=None,
         text=message["text"] + "\n\n<b>✅ Merchant</b>",
         parse_mode="html",
-        
     )
     return {"ok": True}
