@@ -64,6 +64,7 @@ def build_caption(payload: ReviewSchema) -> str:
     # базовые данные
     order = payload.orderId or "—"
     user = payload.userId or "—"
+    user_name = payload.userName or "—"
     date = format_date(payload.created_at)
 
     rating = render_stars(payload.rating)
@@ -83,6 +84,7 @@ def build_caption(payload: ReviewSchema) -> str:
         f"📩 <b>{config['title']}</b>\n\n"
         f"📦 <b>Заказ:</b> #{order}\n"
         f"👤 <b>User ID:</b> {user}\n"
+        f"👤 <b>Пользователь:</b> {user_name}\n"
         f"🕒 <b>Дата:</b> {date}\n\n"
         f"{subject_block}\n"
         f"<b>━━━━━━━━━━━━━━━</b>\n"

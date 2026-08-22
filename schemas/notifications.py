@@ -176,6 +176,7 @@ class ReviewSchema(BaseModel):
     created_by: Optional[int]
     orderId: Optional[int]
     userId: Optional[int]
+    userName: Optional[str]
     type: ReviewType
     rating: Optional[int]
 
