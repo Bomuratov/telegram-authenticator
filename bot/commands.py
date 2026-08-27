@@ -16,7 +16,7 @@ dp.include_router(pay_router)
 @dp.message(Command("myid"))
 async def send_message(message: types.Message):
     return await bot.send_message(
-        chat_id=message.chat.id, text=f"Вот ваш ID, ваше высочество: {message.chat.id}"
+        chat_id=message.chat.id, text=f"ID группы: {message.chat.id}"
     )
 
 
