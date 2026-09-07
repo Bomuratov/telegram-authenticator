@@ -169,7 +169,7 @@ def create_order(payload: PayloadModel):
 
         + f"\n\n<b>💳 Итого: {total_price} сум</b>\n"
 
-        + payment_block
+        # + payment_block
 
         + comment
     
