@@ -135,7 +135,8 @@ def create_order(payload: PayloadModel):
     }
 
     payment = payment_map.get(payload.payment_type, payload.payment_type)
-    payment_block = f"\n\n<b>Способ оплаты: {payment}</b>\n"
+    payment_block = f"\n\n<b>Способ оплаты: 💳 Карта</b>\n"
+    
 
     for container in payload.containers or []:
         if not container.is_active:
@@ -169,7 +170,7 @@ def create_order(payload: PayloadModel):
 
         + f"\n\n<b>💳 Итого: {total_price} сум</b>\n"
 
-        # + payment_block
+        + payment_block
 
         + comment
     
