@@ -61,13 +61,13 @@ class ProductOption(BaseModel):
 
 
 class ProductItem(BaseModel):
-    id: int
-    name: str
-    photo: str
-    price: int
+    id: int | None = None
+    name: str | None = None
+    photo: str | None = None
+    price: int | None = None
     discount: bool
-    quantity: int
-    container: bool
+    quantity: int | None = None
+    container: bool | None = None
     options: ProductOption | None = None
     discount_info: Optional[DiscountPercentInfo] = None
     container_info: Optional[dict] = None
