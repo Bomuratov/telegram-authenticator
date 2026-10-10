@@ -16,7 +16,7 @@ async def new_order_notification(payload: PayloadModel, request: Request):
     source = normalize_source(raw_source)
     # print("REQUEST DATA: ",request.body)
     # print("PAYLOAD: ",payload.json())
-    restaurant_name = payload.restaurant.get("name", None)
+    restaurant_name = payload.restaurant.get("id", None)
     activated = False
     try:
         resp = requests.get(
