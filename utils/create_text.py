@@ -2,12 +2,9 @@ from typing import Dict, Any
 from schemas.notifications import PaidOrderDTO, PayloadModel, AcceptOrderModel
 from zoneinfo import ZoneInfo
 
-
-
 # "options": {"id": 92, "name": "0,7", "price": 12000, "is_active": True},
 # "delivery_price": 5200,
 # "comment": "test test",
-
 
 
 # def create_order(payload: PayloadModel):
@@ -77,7 +74,11 @@ def create_order(payload: PayloadModel):
     discount_info = ""
     containers_block = "\n\n<b>📦 Контейнеры:</b>\n\n"
     containers_info = ""
-    comment = f"\n\n⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>" if payload.comment else ""
+    comment = (
+        f"\n\n⚠️ Комментарий к заказу:\n<b>🚨{payload.comment}🚨</b>"
+        if payload.comment
+        else ""
+    )
 
     # --- обычные товары ---
     # --- обычные товары ---
@@ -90,15 +91,14 @@ def create_order(payload: PayloadModel):
             name = f"{name} ({product.options.name})"
             price = product.options.price
 
-
-        line = (
-            f"<b>— {name} × {quantity} "
-            f"по {price} сум</b>\n\n"
-        )
+        line = f"<b>— {name} × {quantity} " f"по {price} сум</b>\n\n"
 
         if (
             product.discount_info
-            and (product.discount_info.type == "percent_discount" or product.discount_info.type == "fixed_discount")
+            and (
+                product.discount_info.type == "percent_discount"
+                or product.discount_info.type == "fixed_discount"
+            )
             and product.discount_info.discount_price is not None
         ):
             line = (
@@ -126,7 +126,6 @@ def create_order(payload: PayloadModel):
 
         discount_info += line
 
-
     # --- тип оплаты ---
     payment_map = {
         "cash": "💵 Наличными",
@@ -136,7 +135,6 @@ def create_order(payload: PayloadModel):
 
     payment = payment_map.get(payload.payment_type, payload.payment_type)
     payment_block = f"\n\n<b>Способ оплаты: 💳 Карта</b>\n"
-    
 
     for container in payload.containers or []:
         if not container.is_active:
@@ -161,19 +159,12 @@ def create_order(payload: PayloadModel):
         header
         + warehouse
         + order_block
-
         + info
-
         + (containers_block + containers_info if containers_info else "")
-
         + (discount_block + discount_info if discount_info else "")
-
         + f"\n\n<b>💳 Итого: {total_price} сум</b>\n"
-
         + payment_block
-
         + comment
-    
     )
 
     return full
@@ -186,9 +177,15 @@ def accept_text(payload: AcceptOrderModel):
     header = f"<b>✅ Заказ</b> #{order_id}A принят.\n"
     body = f"🚖 Курьер: <b>{courier_name}</b>\n"
     contact = f"📞 Номер курьера: <b>{phone_number}</b>\n"
-    time_tashkent = payload.courier.accepted_at.astimezone(ZoneInfo("Asia/Tashkent"))
-    formatted_time = time_tashkent.strftime("%d.%m.%Y, %H:%M")
-    text = f'🕒 Время принятия: <b>{formatted_time}</b>\n'
+    time_tashkent = (
+        payload.courier.accepted_at.astimezone(ZoneInfo("Asia/Tashkent"))
+        if payload.courier and payload.courier.accepted_at
+        else None
+    )
+    formatted_time = (
+        time_tashkent.strftime("%d.%m.%Y, %H:%M") if time_tashkent else "Не указано"
+    )
+    text = f"🕒 Время принятия: <b>{formatted_time}</b>\n"
     footer = "🍔 Статус: <b>Готовится</b>"
 
     return header + body + contact + text + footer
@@ -200,5 +197,3 @@ def order_paid(payload: PaidOrderDTO):
     footer = f"<b>Можно готовить</b>"
     linear = "<b>————————————————</b>\n"
     return header + linear + footer
-
-

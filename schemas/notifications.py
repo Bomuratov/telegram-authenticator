@@ -137,7 +137,7 @@ class CourierModel(BaseModel):
     id: int
     username: str
     phone_number: str
-    accepted_at: datetime
+    accepted_at: Optional[datetime] = None 
 
 
 class AcceptOrderModel(BaseModel):
